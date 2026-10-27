@@ -1,7 +1,7 @@
 # Conductor initial source implementation
 
-27 October 2026. Status: source implementation complete; native checks and
-publication are not yet verified. The all-project goal is active.
+27 October 2026. Status: source implementation published; native checks remain
+unverified. The all-project goal is active.
 
 ## Source intent
 
@@ -55,5 +55,17 @@ with its four shell blocks passed. All 41 owned text files passed newline and
 trailing-whitespace checks; eight local Markdown links resolve. No active
 workflow is installed. `git diff --check` passed.
 
-Source publication will be recorded after GitHub readback. No all-project
-completion is claimed.
+## Publication
+
+Source commit
+[`63625eb4777155f1526276860f2e408f5fa36cd7`](https://github.com/alvarovillalbaa/conductor/tree/63625eb4777155f1526276860f2e408f5fa36cd7)
+was pushed to the new public personal repository `alvarovillalbaa/conductor`.
+Authenticated CLI identity was checked before creation. Connected GitHub metadata
+confirms public visibility, personal ownership and the `main` default branch;
+the remote branch SHA matches the local source commit.
+
+GitHub file readback matches local Git blobs for ConductorStore
+(`3e9cc241e4395adb7fe87f5555a81da7313c67b8`), ScheduleEngine
+(`3494e9d4bfd70dcb873697b5a347f0b00161e1b5`) and the inactive native-check proposal
+(`52add63dcb0f94df40335941fc185617e027a3a1`). This establishes source publication,
+not a compiled app or distribution. No all-project completion is claimed.
