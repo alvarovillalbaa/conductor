@@ -4,8 +4,9 @@ A native iOS coordinator for tasks that need to finish together. Define the
 tasks and their durations, choose a shared finish time, and Conductor works
 backward to show when each task should start.
 
-**Initial source implementation. Native compilation, tests,
-simulator/device behavior, notifications and distribution are not verified.**
+**Initial native implementation. Forty core tests and an unsigned generic iOS
+Simulator build passed in approved CI. Simulator/device behavior, notifications
+and distribution are not verified.**
 This is not a released iOS application.
 
 ## Intended workflow
@@ -61,6 +62,7 @@ source slice.
 - [Architecture](docs/architecture.md)
 - [Prepared native checks](docs/proposals/native-checks.md)
 - [Initial source receipt](docs/results/2026/10-27/initial-source.md)
+- [Approved native check results](docs/results/2026/10-27/native-checks.md)
 
 This local app needs neither Vercel nor Supabase. Source publication does not
 establish working native delivery; the broader all-project goal remains active.

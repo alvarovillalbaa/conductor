@@ -1,7 +1,8 @@
 # Conductor initial source implementation
 
-27 October 2026. Status: source implementation published; native checks remain
-unverified. The all-project goal is active.
+27 October 2026. Status: initial source publication verified. Subsequent approved
+native checks are recorded in the [result receipt](native-checks.md). The
+all-project goal is active.
 
 ## Source intent
 
@@ -32,19 +33,20 @@ have not been established by native execution yet.
 ## Execution boundary
 
 Storage Guard reported **28.7 GiB free / 38.0 GiB required**, exit 2, for the estimated
-iOS build workload. `xcode-select -p` reports Command Line Tools. No native build,
-test, simulator boot, app launch, notification authorization/delivery, signing,
+iOS build workload. `xcode-select -p` reports Command Line Tools. At initial
+publication, no native build, test, simulator boot, app launch, notification authorization/delivery, signing,
 store submission, dependency install, model call or paid enrollment ran.
 
-The [native-check proposal](../../../proposals/native-checks.md) remains inactive
-pending explicit approval. This local app needs no Vercel/Supabase deployment or
+The [native-check proposal](../../../proposals/native-checks.md) was subsequently
+approved and executed; its temporary workflow has been removed. This local app needs no Vercel/Supabase deployment or
 Expo account. Apple ownership and physical/store distribution remain separate.
 
 ## Source checks
 
 All 25 Swift files passed individual `swiftc -frontend -parse` checks. This is
 syntax checking, not type checking or compilation. The 40 authored in-memory
-XCTest cases remain unrun. An independent source review covered the core,
+XCTest cases were unrun at initial publication and later passed in approved CI.
+An independent source review covered the core,
 storage/recovery/export, reminder lifecycle and native project wiring.
 
 Static metadata checks passed: 17 app files appear exactly once in the Xcode

@@ -1,11 +1,14 @@
 # Proposed Conductor native checks
 
-Status: inactive and pending explicit approval. No workflow is installed.
+Status: approved and executed on 27 October 2026; temporary workflow removed.
+The [result receipt](../results/2026/10-27/native-checks.md) records the proof
+boundary. The example remains inactive for reference, not recurring execution.
 
 The local preflight on 2026-10-27 found 28.7 GiB free against 38.0 GiB required for
 the estimated iOS build workload. Command Line Tools is the selected developer
-directory; a full Xcode/iOS build has not been established locally. No build,
-test, simulator boot, app launch or notification prompt ran.
+directory; a full Xcode/iOS build has not been established locally. The approved
+hosted checks ran separately; no simulator boot, app launch or notification
+prompt ran.
 
 After approval, install the [prepared workflow](native-checks-ci.yml.example)
 under `.github/workflows/conductor-native-checks.yml`, publish it and dispatch
