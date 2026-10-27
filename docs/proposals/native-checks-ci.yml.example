@@ -1,0 +1,38 @@
+name: Conductor focused native checks
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Record source and toolchain
+        run: |
+          git rev-parse HEAD
+          sw_vers
+          swift --version
+          xcodebuild -version
+      - name: Check source metadata
+        run: |
+          bash -n script/check_native.sh
+          plutil -lint Resources/Info.plist Resources/PrivacyInfo.xcprivacy
+          plutil -lint Conductor.xcodeproj/project.pbxproj
+          git diff --check
+      - name: Run authored in-memory core cases
+        run: swift test
+      - name: Compile unsigned generic iOS Simulator app
+        run: |
+          xcodebuild -project Conductor.xcodeproj -scheme Conductor \
+            -configuration Debug -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath "$RUNNER_TEMP/conductor-derived" \
+            CODE_SIGNING_ALLOWED=NO build
