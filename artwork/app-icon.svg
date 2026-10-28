@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>Conductor app icon</title>
+  <desc>Three staggered task durations align beside one shared finish marker.</desc>
+  <rect x="0" y="0" width="1024" height="1024" fill="#4F46E5" />
+  <rect x="264" y="288" width="448" height="96" rx="48" fill="#F8FAFC" />
+  <rect x="392" y="464" width="320" height="96" rx="48" fill="#F8FAFC" />
+  <rect x="200" y="640" width="512" height="96" rx="48" fill="#F8FAFC" />
+  <rect x="744" y="240" width="80" height="544" rx="40" fill="#FDE68A" />
+</svg>

@@ -1,0 +1,36 @@
+name: Conductor app icon build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  icon-build:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Record source and toolchain
+        run: |
+          git rev-parse HEAD
+          sw_vers
+          python3 --version
+          xcodebuild -version
+      - name: Check icon and project metadata
+        run: |
+          python3 script/render_app_icon.py --check
+          plutil -lint Resources/Info.plist Resources/PrivacyInfo.xcprivacy
+          plutil -lint Conductor.xcodeproj/project.pbxproj
+          git diff --check
+      - name: Compile unsigned generic iOS Simulator app and assets
+        run: |
+          xcodebuild -project Conductor.xcodeproj -scheme Conductor \
+            -configuration Debug -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath "$RUNNER_TEMP/conductor-icon-derived" \
+            CODE_SIGNING_ALLOWED=NO build

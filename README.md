@@ -7,6 +7,8 @@ backward to show when each task should start.
 **Initial native implementation. Forty core tests and an unsigned generic iOS
 Simulator build passed in approved CI. Simulator/device behavior, notifications
 and distribution are not verified.**
+The app icon added afterward has source/metadata checks only; its asset-catalog
+compilation and system appearance have not been verified.
 This is not a released iOS application.
 
 ## Intended workflow
@@ -31,7 +33,9 @@ collaboration or iCloud sync. Device clock changes affect Date-based estimates.
 - `App/Conductor`: SwiftUI views, app state, local storage and notification adapter.
 - `Sources/ConductorCore`: scheduling/state/validation/codec, Foundation only.
 - `Tests/ConductorCoreTests`: authored deterministic core tests.
-- `Resources`: bundle metadata and provisional privacy manifest.
+- `Resources`: app-icon asset catalog, bundle metadata and provisional privacy manifest.
+- `artwork/app-icon.svg`: editable original icon; `script/render_app_icon.py`
+  exports its opaque 1024-square PNG using Python's standard library.
 
 The app links the local Swift package; there are no external package dependencies.
 The default bundle ID is `com.alvarovillalbaa.Conductor`. No Apple team or signing
@@ -52,8 +56,10 @@ The second command builds an unsigned generic Simulator target and never boots
 a simulator or launches an app. The Codex action is explicitly a build action.
 Physical-device signing, notification delivery and store distribution need their
 own account/acceptance steps; no paid enrollment is created by these scripts.
-App icon/store assets and App Store publication are not prepared by this initial
-source slice.
+The app-icon source and Xcode resource wiring are prepared. Run
+`python3 script/render_app_icon.py --check` to compare the PNG with its SVG
+master, or omit `--check` to export changes. Actual icon compilation/system
+appearance, screenshots and App Store publication remain unfinished.
 
 ## Scope and evidence
 
@@ -63,6 +69,7 @@ source slice.
 - [Prepared native checks](docs/proposals/native-checks.md)
 - [Initial source receipt](docs/results/2026/10-27/initial-source.md)
 - [Approved native check results](docs/results/2026/10-27/native-checks.md)
+- [App-icon source evidence](docs/results/2026/10-28/app-icon.md)
 
 This local app needs neither Vercel nor Supabase. Source publication does not
 establish working native delivery; the broader all-project goal remains active.
