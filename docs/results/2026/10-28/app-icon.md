@@ -1,7 +1,7 @@
 # App-icon source
 
 28 October 2026. Original icon artwork and asset-catalog registration are
-prepared for source publication. This does not establish a native release.
+published as source. This does not establish a native release.
 
 The artwork uses three staggered white duration bars with a shared right edge
 beside a gold finish marker, on an indigo background consistent with the app's
@@ -46,3 +46,14 @@ distribution, owner accounts and store metadata remain separate work.
 The inactive [app-icon build proposal](../../../proposals/app-icon-build.md)
 prepares one unsigned compilation run for explicit approval. It adds no active
 workflow and does not repeat the unchanged core tests.
+
+## Publication
+
+Source [`42a483e1fd7407ad2df92c069dea44acac343fe0`](https://github.com/alvarovillalbaa/conductor/commit/42a483e1fd7407ad2df92c069dea44acac343fe0)
+was pushed to personal-repository main. Immutable GitHub reads match the local
+project blob (`c3878dc26d148184381a544ffe84ceb53794ea7f`), PNG blob
+(`20f8dd18e4cf75a0fe00efe56e60b3817dd7b6f7`) and build-proposal blob
+(`2baf351d11c40fbc4f79beb95fdc144cde03d5c3`). The later receipt-only commit
+does not change artwork, project, app/core/tests or CI. No active workflow is
+present. The new compilation approval remains pending; the initial approval
+does not authorize a second dispatch.
