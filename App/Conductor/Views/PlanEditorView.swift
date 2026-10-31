@@ -25,6 +25,7 @@ struct PlanEditorView: View {
             Form {
                 Section("Plan") {
                     TextField("Name, such as Dinner together", text: $title)
+                        .accessibilityIdentifier("plan.title")
                     Text("Name the plan and each task in 80 characters or fewer.").font(.caption).foregroundStyle(.secondary)
                 }
                 Section {
@@ -65,6 +66,7 @@ struct PlanEditorView: View {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
                 ToolbarItem(placement: .primaryAction) {
                     Button("Save") { save(asNew: false) }.fontWeight(.semibold).disabled(store.isReadOnly)
+                        .accessibilityIdentifier("plan.save")
                 }
                 ToolbarItem(placement: .bottomBar) { EditButton() }
             }
@@ -92,10 +94,12 @@ private struct DraftTaskEditor: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             TextField("Task name", text: $task.title)
+                .accessibilityIdentifier("plan.task.title.\(task.id.uuidString)")
             Stepper("Hours: \(task.hours)", value: $task.hours, in: 0...24)
                 .accessibilityLabel("\(task.title.isEmpty ? "Task" : task.title) hours")
             Stepper("Minutes: \(task.minutes)", value: $task.minutes, in: 0...59)
                 .accessibilityLabel("\(task.title.isEmpty ? "Task" : task.title) minutes")
+                .accessibilityIdentifier("plan.task.minutes.\(task.id.uuidString)")
             Stepper("Seconds: \(task.seconds)", value: $task.seconds, in: 0...59)
                 .accessibilityLabel("\(task.title.isEmpty ? "Task" : task.title) seconds")
         }.padding(.vertical, 6)

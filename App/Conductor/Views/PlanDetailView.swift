@@ -14,6 +14,7 @@ struct PlanDetailView: View {
                         Button { store.setUpRun(plan) } label: {
                             Label("Choose a Finish Time", systemImage: "flag.checkered")
                         }.disabled(store.isReadOnly)
+                            .accessibilityIdentifier("plan.configureRun")
                     }
                     Section("Tasks") {
                         ForEach(plan.tasks) { task in

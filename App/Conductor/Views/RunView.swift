@@ -20,6 +20,7 @@ struct RunView: View {
                                     .font(.headline).foregroundStyle(.indigo)
                                 Text(status(session))
                                     .font(.subheadline).foregroundStyle(.secondary)
+                                    .accessibilityIdentifier("run.summary")
                             }.padding(.vertical, 8)
                         }
                         Section("Your tasks") {

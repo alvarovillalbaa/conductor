@@ -18,6 +18,7 @@ struct RunTaskRow: View {
                 Spacer()
                 Text(TimeText.phase(task.phase)).font(.caption.weight(.semibold))
                     .foregroundStyle(timing.isDue || timing.isOvertime ? Color.orange : Color.secondary)
+                    .accessibilityIdentifier("run.phase.\(task.id.uuidString)")
             }
             Text("Planned start \(TimeText.fullDate(timing.plannedStart)) · \(TimeText.duration(TimeInterval(task.definition.durationSeconds)))")
                 .font(.caption).foregroundStyle(.secondary)
@@ -65,13 +66,17 @@ struct RunTaskRow: View {
     private var controls: some View {
         if task.phase == .waiting {
             Button("Start") { act(.start) }.tint(.indigo)
+                .accessibilityIdentifier("run.start.\(task.id.uuidString)")
         } else if task.phase == .running {
             Button("Pause") { act(.pause) }
+                .accessibilityIdentifier("run.pause.\(task.id.uuidString)")
         } else if task.phase == .paused {
             Button("Resume") { act(.resume) }.tint(.indigo)
+                .accessibilityIdentifier("run.resume.\(task.id.uuidString)")
         }
         Button("Done") { act(.complete) }.tint(.green)
             .accessibilityLabel("Confirm \(task.definition.title) is done")
+            .accessibilityIdentifier("run.complete.\(task.id.uuidString)")
         Menu {
             Button("Skip Task", role: .destructive) { act(.skip) }
         } label: { Label("More", systemImage: "ellipsis") }

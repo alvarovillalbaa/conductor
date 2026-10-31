@@ -25,6 +25,7 @@ struct RunSetupView: View {
             Form {
                 Section(context.plan.title) {
                     Toggle("Use the soonest possible finish", isOn: $useSoonest)
+                        .accessibilityIdentifier("run.setup.soonest")
                     if useSoonest {
                         Text("The target is recalculated when you create the run. The longest task will be due immediately; press Start when you actually begin it.")
                             .font(.callout).foregroundStyle(.secondary)
@@ -72,6 +73,7 @@ struct RunSetupView: View {
                     Button("Create Run") {
                         if context.existingSession == nil { create() } else { confirmingReplacement = true }
                     }.fontWeight(.semibold).disabled(store.isReadOnly)
+                        .accessibilityIdentifier("run.setup.create")
                 }
             }
             .confirmationDialog("Replace the existing run?", isPresented: $confirmingReplacement, titleVisibility: .visible) {

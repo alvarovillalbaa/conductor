@@ -17,6 +17,7 @@ struct PlansView: View {
                     Text("Make a plan with the tasks you need to coordinate. Conductor will work backward from one shared finish time.")
                 } actions: {
                     Button("Create a Plan") { store.createPlan() }.buttonStyle(.borderedProminent).disabled(store.isReadOnly)
+                        .accessibilityIdentifier("plans.create")
                 }
                 .listRowBackground(Color.clear)
             } else {
