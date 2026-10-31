@@ -7,8 +7,9 @@ backward to show when each task should start.
 **Initial native implementation. Forty core tests and an unsigned generic iOS
 Simulator build passed in approved CI. Simulator/device behavior, notifications
 and distribution are not verified.**
-The app icon added afterward has source/metadata checks only; its asset-catalog
-compilation and system appearance have not been verified.
+The later app icon passed its SVG/PNG comparison, metadata checks and
+[unsigned asset-catalog compilation](docs/results/2026/10-31/app-icon-build.md).
+Its system appearance remains unverified.
 This is not a released iOS application.
 
 ## Intended workflow
@@ -58,8 +59,12 @@ Physical-device signing, notification delivery and store distribution need their
 own account/acceptance steps; no paid enrollment is created by these scripts.
 The app-icon source and Xcode resource wiring are prepared. Run
 `python3 script/render_app_icon.py --check` to compare the PNG with its SVG
-master, or omit `--check` to export changes. Actual icon compilation/system
-appearance, screenshots and App Store publication remain unfinished.
+master, or omit `--check` to export changes. Icon compilation passed on Xcode
+16.4 / iOS Simulator SDK 18.5 at immutable source
+`e278b0798faaea57df97a5d2b63b910340b55e0c`. This later README is a documentation
+edition; app/core code, artwork, renderer and project metadata retain their
+checked bytes. Reproduce the guarded compilation at the receipt's pinned
+revision. System appearance, screenshots and App Store publication remain open.
 
 ## Scope and evidence
 
@@ -70,6 +75,7 @@ appearance, screenshots and App Store publication remain unfinished.
 - [Initial source receipt](docs/results/2026/10-27/initial-source.md)
 - [Approved native check results](docs/results/2026/10-27/native-checks.md)
 - [App-icon source evidence](docs/results/2026/10-28/app-icon.md)
+- [App-icon compilation results](docs/results/2026/10-31/app-icon-build.md)
 
 This local app needs neither Vercel nor Supabase. Source publication does not
 establish working native delivery; the broader all-project goal remains active.
