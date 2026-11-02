@@ -5,8 +5,15 @@ instruction covers one public `macos-15` job, capped at 20 minutes.
 [Attempt 1](../results/2026/10-31/ui-acceptance-attempt-1.md) reached the first
 installed-runtime query's 30-second deadline before simulator creation or UI
 execution. That timeout does not establish runtime absence or a transient cause.
-This unrun repair raises only that first query to 90 seconds and uses a new seal;
-it adds no retry loop, fallback, environment or UI-case change. No local build,
+That bounded repair raised only the first query to 90 seconds.
+[Attempt 2](../results/2026/11-02/ui-acceptance-attempt-2.md) then completed
+runtime checks and create/boot commands, but the post-boot and cleanup inventories
+each reached their 30-second bounds before any app build or UI test. Explicit
+simulator deletion was unverified; the cause of the inventory timeouts is unknown.
+This unrun repair gives device inventories 90 seconds, reserves 180 seconds for
+cleanup and records created identity before boot, while retaining current
+ownership checks for deletion. It adds no retry loop, direct-UUID fallback,
+environment or UI-case change. No local build,
 test, simulator boot, app launch or installation ran. Root publishes the revised
 source and seal first, then pins activation to that immutable preparation commit.
 The active workflow must be absent from the pinned preparation commit.
@@ -34,7 +41,7 @@ intersection with `com.apple.CoreSimulator.SimDeviceType.iPhone-16`.
 It never downloads a runtime/SDK/package or substitutes a device/version.
 `DEVELOPER_DIR` selects the preinstalled toolchain without changing global settings.
 
-The [source seal](../results/2026/11-02/ui-acceptance-source-runtime-wait.json) is
+The [source seal](../results/2026/11-02/ui-acceptance-source-device-wait.json) is
 `conductor.ui-acceptance-source.v1`: complete `files` entries
 `{path,mode,gitBlob,bytes,sha256}`, `fileCount`, `totalBytes`,
 `excludedPrefixes:["docs/results/"]` and the exact scope recorded by the controller.
@@ -50,17 +57,21 @@ be reconciled only by that unique recorded name, never a generic device list
 deletion. Cleanup attempts shutdown/delete of only the owned simulator, then
 removes only marker/device/inode-verified scratch, including failure paths.
 No existing simulator is erased, reused or granted a permission.
+The created-identity snapshot is emitted even if a later inventory fails; it is
+evidence of creation, not evidence of shutdown/deletion, and never bypasses
+current metadata verification for cleanup.
 
 The exact `xcodebuild test` selection has one iteration, parallel testing off,
 `CODE_SIGNING_ALLOWED=NO`, no code coverage or package update/resolution, and
 owned DerivedData/result paths. Commands have bounded time/output and dedicated
-process groups. The first runtime-list query is bounded to 90 seconds; other
-JSON commands retain their 30-second limit. Cancellation/deadline sends TERM
+process groups. The first runtime-list query and normal/cleanup device inventories
+are bounded to 90 seconds; other JSON commands retain their 30-second limit.
+The boot-status bound remains 120 seconds. Cancellation/deadline sends TERM
 followed by KILL after three
 seconds, with a further three-second pipe-drain bound and bounded reap attempts.
 Any unreaped command makes acceptance fail, including optional metadata work;
 `processesReaped` is reported separately from scratch removal. The controller
-reserves 15 minutes for work and 120 seconds for cleanup and the final source guard.
+reserves 15 minutes for work and 180 seconds for cleanup and the final source guard.
 The job's independent cap remains 20 minutes. Actual command exits, stop reasons,
 captured/observed sizes and SHA-256 hashes remain visible; errors are not turned
 into successful cases.

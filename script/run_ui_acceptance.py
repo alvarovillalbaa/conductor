@@ -16,7 +16,7 @@ import tempfile
 import time
 import uuid
 
-SEAL = "docs/results/2026/11-02/ui-acceptance-source-runtime-wait.json"
+SEAL = "docs/results/2026/11-02/ui-acceptance-source-device-wait.json"
 WORKFLOW = ".github/workflows/ui-acceptance.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
@@ -232,7 +232,7 @@ class Acceptance:
 
     def devices(self, cleanup=False):
         value, _ = self.json_command("cleanup-devices" if cleanup else "devices",
-                                     ["xcrun", "simctl", "list", "devices", "-j"], cleanup=cleanup)
+                                     ["xcrun", "simctl", "list", "devices", "-j"], cleanup=cleanup, seconds=90)
         require(isinstance(value.get("devices"), dict), "devices_schema_invalid")
         return [(runtime, row) for runtime, rows in value["devices"].items() for row in rows]
 
@@ -277,6 +277,7 @@ class Acceptance:
         raw, _ = self.run("create", ["xcrun", "simctl", "create", self.planned["name"], SCOPE["deviceType"], SCOPE["runtime"]])
         self.simulator = identifier(raw.decode().strip())
         self.write_ledger("owned-device.json", {**self.planned, "uuid": self.simulator})
+        self.report["createdSimulator"] = {**self.planned, "uuid": self.simulator}
         self.verify_ledgers()
         device = self.owned_device()
         require(device is not None and device["state"] == "Shutdown", "fresh_device_not_shutdown")
@@ -358,7 +359,7 @@ class Acceptance:
 
     def cleanup(self):
         if self.cleanup_deadline is None:
-            self.cleanup_deadline = time.monotonic() + 120
+            self.cleanup_deadline = time.monotonic() + 180
         errors = []
         try:
             self.verify_ledgers()
@@ -404,7 +405,7 @@ def main():
     except Exception as error:
         errors.append(type(error).__name__ + ":" + str(error))
     finally:
-        check.cleanup_deadline = time.monotonic() + 120
+        check.cleanup_deadline = time.monotonic() + 180
         try:
             check.guard("afterSourceGuard", cleanup=True)
         except Exception as error:

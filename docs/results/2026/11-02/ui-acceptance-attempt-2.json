@@ -1,0 +1,496 @@
+{
+  "schemaVersion": "conductor.ui-acceptance-attempt.v1",
+  "attempt": 2,
+  "runDate": "2026-11-02",
+  "status": "post-boot-inventory-timeout-before-ui",
+  "repository": "alvarovillalbaa/conductor",
+  "source": {
+    "commit": "38c7a06d0dcd6fbe555bb4a98945a15be0752bdd",
+    "tree": "0ca92dc89bcf01ae507194565568b3d650278f6e",
+    "seal": "docs/results/2026/11-02/ui-acceptance-source-runtime-wait.json",
+    "sealSha256": "a044c9ec503cb14322f7fe0db757020987f784db9c3887506526af5ab897d37f",
+    "files": 51,
+    "bytes": 197998,
+    "controllerSha256": "a28238f2ad9f047f5d07360853818a77d5a8f689feac584c37aa7a8143d1793d"
+  },
+  "workflow": {
+    "path": ".github/workflows/ui-acceptance.yml",
+    "commit": "7d62bb9db3d4b444b2f21936564a961718bcde36",
+    "tree": "bfd8d26d448fef7ee7b83ed86eb7ca8a577fdf2e",
+    "sha256": "87cbe645495645491484df1d7c2c6f8c76cd9d58e77f5e093f6828a7cffa615a",
+    "runner": "macos-15",
+    "jobMinutes": 20
+  },
+  "run": {
+    "id": 41414866879,
+    "attempt": 1,
+    "event": "push",
+    "branch": "main",
+    "url": "https://github.com/alvarovillalbaa/conductor/actions/runs/41414866879",
+    "createdAt": "2026-11-02T08:41:12Z",
+    "updatedAt": "2026-11-02T08:45:10Z",
+    "status": "completed",
+    "conclusion": "failure"
+  },
+  "job": {
+    "id": 125176157650,
+    "name": "ui-acceptance",
+    "url": "https://github.com/alvarovillalbaa/conductor/actions/runs/41414866879/job/125176157650",
+    "conclusion": "failure",
+    "controllerExitCode": 1,
+    "reportAt": "2026-11-02T08:44:05.5866070Z"
+  },
+  "execution": {
+    "invocations": 1,
+    "retries": 0,
+    "plannedUiCases": 1,
+    "executedUiCases": 0,
+    "uiVerdict": "unrun",
+    "coreTestsRun": 0,
+    "createExitCode": 0,
+    "bootExitCode": 0,
+    "bootStatusExitCode": 0,
+    "buildOrUiTestCommandRan": false,
+    "xcresultProduced": false
+  },
+  "progress": {
+    "toolchain": {
+      "xcode": "Xcode 16.4\nBuild version 16F6",
+      "sdk": "18.5",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+      "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-16"
+    },
+    "qualification": "The exact runtime/device metadata checks passed. Create, the fresh-device identity check, boot and bounded boot-status command completed. The subsequent query intended to verify Booted state produced no metadata."
+  },
+  "failures": [
+    {
+      "phase": "post-boot owned-device inventory",
+      "commandSequenceIndex": 14,
+      "label": "devices",
+      "argv": [
+        "xcrun",
+        "simctl",
+        "list",
+        "devices",
+        "-j"
+      ],
+      "configuredDeadlineSeconds": 30,
+      "exitCode": -15,
+      "stop": "timeout",
+      "stdoutBytes": 0,
+      "stderrBytes": 0,
+      "reaped": true
+    },
+    {
+      "phase": "cleanup owned-device inventory",
+      "commandSequenceIndex": 19,
+      "label": "cleanup-devices",
+      "argv": [
+        "xcrun",
+        "simctl",
+        "list",
+        "devices",
+        "-j"
+      ],
+      "configuredDeadlineSeconds": 30,
+      "exitCode": -15,
+      "stop": "timeout",
+      "stdoutBytes": 0,
+      "stderrBytes": 0,
+      "reaped": true
+    }
+  ],
+  "diagnosis": "Both inventory calls reached their configured 30-second deadline and terminated with SIGTERM, with no stdout/stderr. The underlying cause is unknown; missing runtimes, transient service failure or a permission problem is not established.",
+  "cleanup": {
+    "processesReaped": true,
+    "simulatorCleanup": "failed",
+    "scratchCleanup": "passed",
+    "shutdownCommandRan": false,
+    "deleteCommandRan": false,
+    "identityInPublishedReport": false,
+    "qualification": "No shutdown/delete command ran because current inventory could not verify identity. The created UUID/name were stored in owned scratch but were not emitted by this controller version; scratch removal erased that local ledger. Explicit simulator deletion is unverified. Only the ephemeral hosted-runner isolation/disposal boundary remained after job termination; no disposal result is claimed here."
+  },
+  "rawReport": {
+    "bytes": 7314,
+    "sha256": "ee8246cc082202018489225a55a2908fcd867fa247d459898b8bbca6a995f9bc",
+    "framing": "Exact emitted JSON in the canonical job log, excluding timestamp/newline. The controllerReport object is preserved without normalization."
+  },
+  "controllerReport": {
+    "schemaVersion": "conductor.ui-acceptance.v1",
+    "sourceCommit": "38c7a06d0dcd6fbe555bb4a98945a15be0752bdd",
+    "scope": {
+      "scheme": "ConductorUIAcceptance",
+      "testIdentifier": "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion",
+      "expectedCases": 1,
+      "xcodeVersion": "16.4",
+      "xcodeBuild": "16F6",
+      "sdk": "18.5",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+      "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-16"
+    },
+    "status": "failed",
+    "commands": [
+      {
+        "label": "beforeSourceGuard-head",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 41,
+          "capturedBytes": 41,
+          "sha256": "fec416e815d2aa955eb7824af1cf8b10c3f887a0f95fb16703a6dcc078739c85"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "beforeSourceGuard-seal",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 15120,
+          "capturedBytes": 15120,
+          "sha256": "a044c9ec503cb14322f7fe0db757020987f784db9c3887506526af5ab897d37f"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "beforeSourceGuard-index",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 5577,
+          "capturedBytes": 5577,
+          "sha256": "035f41dc7d8334fa01066d272801c5a615e27466a169fef5770bc7e99cde9602"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "beforeSourceGuard-tree",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 5766,
+          "capturedBytes": 5766,
+          "sha256": "261fd358d25473c297947074b2c10056e25d7f578cf3573b536ff3fd26811904"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "xcode",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 30,
+          "capturedBytes": 30,
+          "sha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "sdk",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 5,
+          "capturedBytes": 5,
+          "sha256": "a63403a2472f8c14d9ac8ac94ef7e77d9e13844217cddc161cbc573aeaec8836"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "runtimes",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 133117,
+          "capturedBytes": 133117,
+          "sha256": "c559e98279e8529b8b431a5400e4bd4f107ec2dce807d2c701cd8f654e1788b6"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "device-types",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 60485,
+          "capturedBytes": 60485,
+          "sha256": "eaa4e52bb47a019e54e6f57af943a698eec13f24e346c056dfa628c5f27c7272"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "devices",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 71890,
+          "capturedBytes": 71890,
+          "sha256": "37f4c17927acec0a070fd79324876630f96cce9f1132f623f08d0ca6bbcd70ce"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "create",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 37,
+          "capturedBytes": 37,
+          "sha256": "8187da39e3c16424480003bdefa209de42cc60670e730a3d9b21e2f4c0e2048a"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "devices",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 72443,
+          "capturedBytes": 72443,
+          "sha256": "61809b73f1ecd50900e335b1e3eb95acdc3c510096e69244d8c6e936bf3582ce"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "boot",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "boot-status",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 1678,
+          "capturedBytes": 1678,
+          "sha256": "a310da42cba265020928d7b8dc357b4f767d5b5a8da5be831423faf5457cefab"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "devices",
+        "exitCode": -15,
+        "stop": "timeout",
+        "stdout": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "failureTail": "",
+        "firstFailureMessagesByStream": {},
+        "reaped": true
+      },
+      {
+        "label": "afterSourceGuard-head",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 41,
+          "capturedBytes": 41,
+          "sha256": "fec416e815d2aa955eb7824af1cf8b10c3f887a0f95fb16703a6dcc078739c85"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "afterSourceGuard-seal",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 15120,
+          "capturedBytes": 15120,
+          "sha256": "a044c9ec503cb14322f7fe0db757020987f784db9c3887506526af5ab897d37f"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "afterSourceGuard-index",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 5577,
+          "capturedBytes": 5577,
+          "sha256": "035f41dc7d8334fa01066d272801c5a615e27466a169fef5770bc7e99cde9602"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "afterSourceGuard-tree",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 5766,
+          "capturedBytes": 5766,
+          "sha256": "261fd358d25473c297947074b2c10056e25d7f578cf3573b536ff3fd26811904"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "cleanup-devices",
+        "exitCode": -15,
+        "stop": "timeout",
+        "stdout": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "failureTail": "",
+        "firstFailureMessagesByStream": {},
+        "reaped": true
+      }
+    ],
+    "screenshots": {
+      "pixelsRetained": false,
+      "viewed": false,
+      "metadata": []
+    },
+    "beforeSourceGuard": {
+      "passed": true,
+      "files": 51,
+      "totalBytes": 197998,
+      "sealSha256": "a044c9ec503cb14322f7fe0db757020987f784db9c3887506526af5ab897d37f"
+    },
+    "toolchain": {
+      "xcode": "Xcode 16.4\nBuild version 16F6",
+      "sdk": "18.5",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+      "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-16"
+    },
+    "afterSourceGuard": {
+      "passed": true,
+      "files": 51,
+      "totalBytes": 197998,
+      "sealSha256": "a044c9ec503cb14322f7fe0db757020987f784db9c3887506526af5ab897d37f"
+    },
+    "simulatorCleanup": "failed",
+    "scratchCleanup": "passed",
+    "errors": [
+      "Refused:devices_failed",
+      "Refused:cleanup-devices_failed"
+    ],
+    "processesReaped": true,
+    "interrupted": false
+  },
+  "limits": {
+    "firstRuntimeQuerySeconds": 90,
+    "deviceInventorySeconds": 30,
+    "workWallSeconds": 900,
+    "cleanupAndFinalGuardSeconds": 120,
+    "termKillGraceSeconds": 3,
+    "postKillDrainSeconds": 3,
+    "jobMinutes": 20,
+    "reportBytes": 65536
+  },
+  "history": {
+    "attempt1": "docs/results/2026/10-31/ui-acceptance-attempt-1.md",
+    "qualification": "Attempt1 timed out before runtime JSON or simulator creation. Attempt2 passed those checks but failed at a different, post-boot metadata call. Neither executed the UI case."
+  },
+  "proofLimits": [
+    "No Conductor app build, installation, launch, UI assertion, xcresult or screenshot was produced by this attempt.",
+    "This attempt did create and issue boot commands for an owned simulator; simulator cleanup failed, so it must not be represented as complete.",
+    "All 51 source inputs and controller processes passed the reported before/after guards and reap checks; these are separate from failed resource deletion.",
+    "Command output hashes are retained in the actual report. Raw UUID/name and individual command durations were not retained.",
+    "No source repair, retry, new run, local simulator action, signing, account, notification acceptance, model or paid action occurred while preserving this receipt.",
+    "Root owns any subsequent bounded repair and activation. The UI journey/full delivery goal remain unfinished."
+  ]
+}
