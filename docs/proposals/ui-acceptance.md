@@ -1,10 +1,14 @@
 # One real UI acceptance case — source preparation
 
-31 October 2026. The current owner instruction and root's exact assignment cover
-one public `macos-15` job, capped at 20 minutes. These files are authored only:
-no local build, test, simulator boot, app launch, installation or dispatch ran.
-Root publishes a preparation commit containing the new source seal, replaces
-the workflow's base placeholder with that full SHA, then activates separately.
+Original preparation: 31 October 2026. Update: 2 November 2026. The current owner
+instruction covers one public `macos-15` job, capped at 20 minutes.
+[Attempt 1](../results/2026/10-31/ui-acceptance-attempt-1.md) reached the first
+installed-runtime query's 30-second deadline before simulator creation or UI
+execution. That timeout does not establish runtime absence or a transient cause.
+This unrun repair raises only that first query to 90 seconds and uses a new seal;
+it adds no retry loop, fallback, environment or UI-case change. No local build,
+test, simulator boot, app launch or installation ran. Root publishes the revised
+source and seal first, then pins activation to that immutable preparation commit.
 The active workflow must be absent from the pinned preparation commit.
 
 The sole scheme is `ConductorUIAcceptance`; the sole selection is
@@ -30,7 +34,7 @@ intersection with `com.apple.CoreSimulator.SimDeviceType.iPhone-16`.
 It never downloads a runtime/SDK/package or substitutes a device/version.
 `DEVELOPER_DIR` selects the preinstalled toolchain without changing global settings.
 
-The [source seal](../results/2026/10-31/ui-acceptance-source.json) is
+The [source seal](../results/2026/11-02/ui-acceptance-source-runtime-wait.json) is
 `conductor.ui-acceptance-source.v1`: complete `files` entries
 `{path,mode,gitBlob,bytes,sha256}`, `fileCount`, `totalBytes`,
 `excludedPrefixes:["docs/results/"]` and the exact scope recorded by the controller.
@@ -50,7 +54,9 @@ No existing simulator is erased, reused or granted a permission.
 The exact `xcodebuild test` selection has one iteration, parallel testing off,
 `CODE_SIGNING_ALLOWED=NO`, no code coverage or package update/resolution, and
 owned DerivedData/result paths. Commands have bounded time/output and dedicated
-process groups; cancellation/deadline sends TERM followed by KILL after three
+process groups. The first runtime-list query is bounded to 90 seconds; other
+JSON commands retain their 30-second limit. Cancellation/deadline sends TERM
+followed by KILL after three
 seconds, with a further three-second pipe-drain bound and bounded reap attempts.
 Any unreaped command makes acceptance fail, including optional metadata work;
 `processesReaped` is reported separately from scratch removal. The controller

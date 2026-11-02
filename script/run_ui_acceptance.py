@@ -16,7 +16,7 @@ import tempfile
 import time
 import uuid
 
-SEAL = "docs/results/2026/10-31/ui-acceptance-source.json"
+SEAL = "docs/results/2026/11-02/ui-acceptance-source-runtime-wait.json"
 WORKFLOW = ".github/workflows/ui-acceptance.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
@@ -167,8 +167,8 @@ class Acceptance:
         require(accept_failure or (code == 0 and reason is None), label + "_failed")
         return out, row
 
-    def json_command(self, label, args, cleanup=False):
-        raw, _ = self.run(label, args, cap=1024 * 1024, cleanup=cleanup)
+    def json_command(self, label, args, cleanup=False, seconds=30):
+        raw, _ = self.run(label, args, seconds=seconds, cap=1024 * 1024, cleanup=cleanup)
         return json.loads(raw.decode("utf-8")), raw
 
     def guard(self, label, cleanup=False):
@@ -259,7 +259,7 @@ class Acceptance:
         require(version == "Xcode 16.4\nBuild version 16F6", "xcode_pin_unavailable")
         sdk = self.run("sdk", ["xcrun", "--sdk", "iphonesimulator", "--show-sdk-version"])[0].decode().strip()
         require(sdk == "18.5", "sdk_pin_unavailable")
-        runtimes, _ = self.json_command("runtimes", ["xcrun", "simctl", "list", "runtimes", "-j"])
+        runtimes, _ = self.json_command("runtimes", ["xcrun", "simctl", "list", "runtimes", "-j"], seconds=90)
         selected = [r for r in runtimes.get("runtimes", []) if r.get("identifier") == SCOPE["runtime"]]
         require(len(selected) == 1 and selected[0].get("isAvailable") is True
                 and selected[0].get("version") == "18.5", "runtime_pin_unavailable")
