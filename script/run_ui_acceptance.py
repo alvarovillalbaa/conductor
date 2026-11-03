@@ -16,7 +16,7 @@ import tempfile
 import time
 import uuid
 
-SEAL = "docs/results/2026/11-03/ui-acceptance-source-runner-temp.json"
+SEAL = "docs/results/2026/11-03/ui-acceptance-source-single-run.json"
 WORKFLOW = ".github/workflows/ui-acceptance.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
@@ -310,7 +310,7 @@ class Acceptance:
             "-configuration", "Debug", "-sdk", "iphonesimulator", "-destination", "id=" + self.simulator,
             "-destination-timeout", "60", "-derivedDataPath", str(self.root / "DerivedData"),
             "-resultBundlePath", str(result), "-resultBundleVersion", "3", "-only-testing:" + CASE,
-            "-parallel-testing-enabled", "NO", "-test-iterations", "1", "-enableCodeCoverage", "NO",
+            "-parallel-testing-enabled", "NO", "-enableCodeCoverage", "NO",
             "-test-timeouts-enabled", "YES",
             "-disableAutomaticPackageResolution", "-skipPackageUpdates", "CODE_SIGNING_ALLOWED=NO", "test"],
             seconds=600, cap=4 * 1024 * 1024, accept_failure=True)

@@ -22,16 +22,26 @@ value again: 24,072 ms, 824 ms and 263 ms, each with the same 16 runtimes and
 available iOS 18.5. This ordering can include service/cache warming; it does not
 establish that `TMPDIR` caused the earlier timeouts or prove repeatability.
 
-This next source-only preparation uses the runner's actual `TMPDIR` string for
+Apple tools use the runner's actual `TMPDIR` string for
 Apple tools after validating that it is absolute and names an existing directory.
 It preserves that string exactly, including aliases or a trailing separator.
 Controller scratch, DerivedData, xcresult and ledgers retain their existing owned
 paths. Other environment values, process/cleanup budgets, toolchain/device pins
 and the one UI case are unchanged. There is no retry or direct-UUID fallback.
-No build, simulator or UI execution of this revision has occurred; the probe
-supplies no UI acceptance proof. Root publishes this preparation and seal first,
-then pins separate activation. Both temporary UI and metadata-probe workflows
-must be absent from the pinned preparation commit.
+[Attempt 4](../results/2026/11-03/ui-acceptance-attempt-4.md) completed metadata,
+simulator creation/boot and verified owned deletion, but Xcode exited 64 before
+app build or the authored case: `-test-iterations 1` requires more than one
+iteration. The xcresult's failed node is an argument-error placeholder, not an
+execution of the authored UI case. Successful bootstrap on this runner does not
+establish a `TMPDIR` cause for earlier timeouts.
+
+This unrun CLI repair removes only that argument pair and uses Xcode's default
+single execution, with no repetition or retry flag. The exact selected UI case,
+parallel-testing setting, actual exit check, strict one-passed-case xcresult
+identity/totals gates and all other resources remain unchanged. No execution of
+this revision or UI acceptance is claimed. Root publishes this preparation and
+seal first, then pins separate activation. Both temporary UI and metadata-probe
+workflows must be absent from the pinned preparation commit.
 
 The sole scheme is `ConductorUIAcceptance`; the sole selection is
 `ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion`.
@@ -56,7 +66,7 @@ intersection with `com.apple.CoreSimulator.SimDeviceType.iPhone-16`.
 It never downloads a runtime/SDK/package or substitutes a device/version.
 `DEVELOPER_DIR` selects the preinstalled toolchain without changing global settings.
 
-The [source seal](../results/2026/11-03/ui-acceptance-source-runner-temp.json) is
+The [source seal](../results/2026/11-03/ui-acceptance-source-single-run.json) is
 `conductor.ui-acceptance-source.v1`: complete `files` entries
 `{path,mode,gitBlob,bytes,sha256}`, `fileCount`, `totalBytes`,
 `excludedPrefixes:["docs/results/"]` and the exact scope recorded by the controller.
@@ -76,7 +86,8 @@ The created-identity snapshot is emitted even if a later inventory fails; it is
 evidence of creation, not evidence of shutdown/deletion, and never bypasses
 current metadata verification for cleanup.
 
-The exact `xcodebuild test` selection has one iteration, parallel testing off,
+The exact `xcodebuild test` selection uses default single execution without any
+repetition/retry flag, parallel testing off,
 `CODE_SIGNING_ALLOWED=NO`, no code coverage or package update/resolution, and
 owned DerivedData/result paths. Commands have bounded time/output and dedicated
 process groups. The first runtime-list query and normal/cleanup device inventories
