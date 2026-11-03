@@ -1,0 +1,27 @@
+name: Conductor single UI acceptance
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [.github/workflows/ui-acceptance.yml]
+
+permissions:
+  contents: read
+
+jobs:
+  ui-acceptance:
+    if: github.repository == 'alvarovillalbaa/conductor' && github.ref == 'refs/heads/main' && github.event.repository.private == false
+    runs-on: macos-15
+    timeout-minutes: 20
+    env:
+      SOURCE_COMMIT: 8499877a8033ecc5054e823578e639998cbe3f8e
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: One source-pinned UI case with guarded simulator cleanup
+        run: python3 script/run_ui_acceptance.py --source-commit "$SOURCE_COMMIT"
