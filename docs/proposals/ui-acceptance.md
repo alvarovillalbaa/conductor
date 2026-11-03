@@ -1,6 +1,6 @@
 # One real UI acceptance case — source preparation
 
-Original preparation: 31 October 2026. Update: 2 November 2026. The current owner
+Original preparation: 31 October 2026. Update: 4 November 2026. The current owner
 instruction covers one public `macos-15` job, capped at 20 minutes.
 [Attempt 1](../results/2026/10-31/ui-acceptance-attempt-1.md) reached the first
 installed-runtime query's 30-second deadline before simulator creation or UI
@@ -10,13 +10,28 @@ That bounded repair raised only the first query to 90 seconds.
 runtime checks and create/boot commands, but the post-boot and cleanup inventories
 each reached their 30-second bounds before any app build or UI test. Explicit
 simulator deletion was unverified; the cause of the inventory timeouts is unknown.
-This unrun repair gives device inventories 90 seconds, reserves 180 seconds for
-cleanup and records created identity before boot, while retaining current
-ownership checks for deletion. It adds no retry loop, direct-UUID fallback,
-environment or UI-case change. No local build,
-test, simulator boot, app launch or installation ran. Root publishes the revised
-source and seal first, then pins activation to that immutable preparation commit.
-The active workflow must be absent from the pinned preparation commit.
+The device-wait repair retained 90-second device inventories, a 180-second cleanup
+reserve and created identity before boot. [Attempt 3](../results/2026/11-02/ui-acceptance-attempt-3.md)
+then reached the first runtime query's 90-second deadline before simulator
+creation, app build or UI execution. All three failed UI attempts remain preserved.
+
+The [metadata-only probe](../results/2026/11-02/simulator-environment-probe.md)
+passed on 2 November and was recorded on 3 November. Its ordered runtime queries
+used the runner's original `TMPDIR`, a fresh owned `TMPDIR`, then the original
+value again: 24,072 ms, 824 ms and 263 ms, each with the same 16 runtimes and
+available iOS 18.5. This ordering can include service/cache warming; it does not
+establish that `TMPDIR` caused the earlier timeouts or prove repeatability.
+
+This next source-only preparation uses the runner's actual `TMPDIR` string for
+Apple tools after validating that it is absolute and names an existing directory.
+It preserves that string exactly, including aliases or a trailing separator.
+Controller scratch, DerivedData, xcresult and ledgers retain their existing owned
+paths. Other environment values, process/cleanup budgets, toolchain/device pins
+and the one UI case are unchanged. There is no retry or direct-UUID fallback.
+No build, simulator or UI execution of this revision has occurred; the probe
+supplies no UI acceptance proof. Root publishes this preparation and seal first,
+then pins separate activation. Both temporary UI and metadata-probe workflows
+must be absent from the pinned preparation commit.
 
 The sole scheme is `ConductorUIAcceptance`; the sole selection is
 `ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion`.
@@ -41,7 +56,7 @@ intersection with `com.apple.CoreSimulator.SimDeviceType.iPhone-16`.
 It never downloads a runtime/SDK/package or substitutes a device/version.
 `DEVELOPER_DIR` selects the preinstalled toolchain without changing global settings.
 
-The [source seal](../results/2026/11-02/ui-acceptance-source-device-wait.json) is
+The [source seal](../results/2026/11-03/ui-acceptance-source-runner-temp.json) is
 `conductor.ui-acceptance-source.v1`: complete `files` entries
 `{path,mode,gitBlob,bytes,sha256}`, `fileCount`, `totalBytes`,
 `excludedPrefixes:["docs/results/"]` and the exact scope recorded by the controller.

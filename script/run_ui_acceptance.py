@@ -16,7 +16,7 @@ import tempfile
 import time
 import uuid
 
-SEAL = "docs/results/2026/11-02/ui-acceptance-source-device-wait.json"
+SEAL = "docs/results/2026/11-03/ui-acceptance-source-runner-temp.json"
 WORKFLOW = ".github/workflows/ui-acceptance.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
@@ -50,6 +50,8 @@ class Acceptance:
                 and os.environ.get("GITHUB_REPOSITORY") == "alvarovillalbaa/conductor"
                 and os.environ.get("GITHUB_REF") == "refs/heads/main", "public_ci_scope_required")
         self.repo = Path.cwd().resolve()
+        runner_tmpdir = os.environ["TMPDIR"]
+        require(os.path.isabs(runner_tmpdir) and Path(runner_tmpdir).is_dir(), "runner_tmpdir_invalid")
         self.parent = Path(os.environ["RUNNER_TEMP"]).resolve(strict=True)
         self.root = Path(tempfile.mkdtemp(prefix="conductor-ui-acceptance-", dir=self.parent))
         self.identity = self.root.stat()
@@ -58,7 +60,7 @@ class Acceptance:
         self.commit, self.interrupted, self.active = commit, False, None
         self.deadline, self.cleanup_deadline = time.monotonic() + 900, None
         self.env = {"PATH": "/usr/bin:/bin:/usr/sbin:/sbin", "HOME": os.environ["HOME"],
-                    "TMPDIR": str(self.root), "LANG": "en_US.UTF-8",
+                    "TMPDIR": runner_tmpdir, "LANG": "en_US.UTF-8",
                     "DEVELOPER_DIR": "/Applications/Xcode_16.4.app/Contents/Developer"}
         self.commands, self.simulator, self.planned, self.seal_hash = [], None, None, None
         self.create_attempted = False

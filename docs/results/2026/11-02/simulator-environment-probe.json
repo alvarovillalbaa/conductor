@@ -1,0 +1,312 @@
+{
+  "schemaVersion": "conductor.simulator-environment-probe-receipt.v1",
+  "status": "passed",
+  "executionDate": "2026-11-02",
+  "observedAndAuthoredAtUtc": "2026-11-03T22:56:18Z",
+  "dateQualification": "This receipt was authored on 3 November for the already completed 2 November run. The result directory follows the execution date. No new run was started.",
+  "source": {
+    "repository": "alvarovillalbaa/conductor",
+    "commit": "e38366c1ed51ad1044f9d06283d069b1436b331f",
+    "tree": "25261136b42e4f194a0c0e82d5ef7207e5791efd",
+    "preparedFromSource": "73bc9c595eeca2a9df9e77a8eef9bdbb63ec4997",
+    "workflowPath": ".github/workflows/simulator-environment-probe.yml",
+    "workflowSha256": "1de2557e0c43e6985a6f69445833a7e3d7165a567881bd36e9f15bc5ed815624",
+    "workflowBytes": 15477,
+    "workflowGitBlob": "89adbfe9c0af8bbf3f47f4528ff747d3399c0b72",
+    "workflowUrl": "https://github.com/alvarovillalbaa/conductor/blob/e38366c1ed51ad1044f9d06283d069b1436b331f/.github/workflows/simulator-environment-probe.yml",
+    "checkoutUsed": false,
+    "applicationSourceGuardOrExecution": false
+  },
+  "run": {
+    "conclusion": "success",
+    "created_at": "2026-11-02T09:06:27Z",
+    "event": "push",
+    "head_branch": "main",
+    "head_sha": "e38366c1ed51ad1044f9d06283d069b1436b331f",
+    "html_url": "https://github.com/alvarovillalbaa/conductor/actions/runs/41417969431",
+    "id": 41417969431,
+    "name": "Conductor simulator environment probe",
+    "path": ".github/workflows/simulator-environment-probe.yml",
+    "run_attempt": 1,
+    "run_started_at": "2026-11-02T09:06:27Z",
+    "status": "completed",
+    "updated_at": "2026-11-02T09:12:49Z"
+  },
+  "job": {
+    "completed_at": "2026-11-02T09:12:48Z",
+    "conclusion": "success",
+    "html_url": "https://github.com/alvarovillalbaa/conductor/actions/runs/41417969431/job/125186350962",
+    "id": 125186350962,
+    "labels": [
+      "macos-15"
+    ],
+    "name": "metadata",
+    "run_id": 41417969431,
+    "runner_group_name": "GitHub Actions",
+    "runner_name": "GitHub Actions 1000005299",
+    "started_at": "2026-11-02T09:11:58Z",
+    "status": "completed"
+  },
+  "observedRunner": {
+    "label": "macos-15",
+    "image": "macos-15-arm64",
+    "imageVersion": "20261028.0489.1",
+    "macOSVersion": "15.8.2",
+    "macOSBuild": "24H232",
+    "selectedXcode": "16.4",
+    "selectedXcodeBuild": "16F6",
+    "simulatorSdk": "18.5",
+    "pythonVersion": "Not printed by this workflow."
+  },
+  "reportEvidence": {
+    "jobLogUrl": "https://github.com/alvarovillalbaa/conductor/actions/runs/41417969431/job/125186350962",
+    "reportLogTimestamp": "2026-11-02T09:12:35.4365810Z",
+    "rawJsonBytes": 4654,
+    "rawJsonSha256": "d53c22f1a8c041fa640f043cf5566468d84b8eec810cea5850d8114681414d09",
+    "rawJsonHashScope": "Exact compact controller JSON, excluding the log timestamp/prefix and newline.",
+    "decodedJobLogUtf8Bytes": 29426,
+    "decodedJobLogUtf8Sha256": "185f336f4beddea05f8c874df62438f7c3ab2836172a659215c72500f0cf9c1b",
+    "decodedLogHashScope": "UTF-8 encoding of the connected GitHub tool's decoded job-log text, including its BOM and timestamps; not an archive or raw HTTP-response hash.",
+    "controllerStepConclusion": "success",
+    "numericControllerExitSeparatelyPrinted": false
+  },
+  "controllerReport": {
+    "schemaVersion": "conductor.simulator-environment-probe.v1",
+    "preparedFromSource": "73bc9c595eeca2a9df9e77a8eef9bdbb63ec4997",
+    "workflowCommit": "e38366c1ed51ad1044f9d06283d069b1436b331f",
+    "startedAt": "2026-11-02T09:12:08.704465+00:00",
+    "status": "passed",
+    "commands": [
+      {
+        "label": "xcode-version",
+        "exitCode": 0,
+        "stop": null,
+        "reaped": true,
+        "started": true,
+        "elapsedMs": 84,
+        "stdout": {
+          "observedBytes": 30,
+          "capturedBytes": 30,
+          "observedSha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12",
+          "capturedSha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12",
+          "observedComplete": true,
+          "capturedComplete": true
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "observedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "capturedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "observedComplete": true,
+          "capturedComplete": true
+        },
+        "processPassed": true,
+        "metadataValid": true
+      },
+      {
+        "label": "simulator-sdk",
+        "exitCode": 0,
+        "stop": null,
+        "reaped": true,
+        "started": true,
+        "elapsedMs": 1450,
+        "stdout": {
+          "observedBytes": 5,
+          "capturedBytes": 5,
+          "observedSha256": "a63403a2472f8c14d9ac8ac94ef7e77d9e13844217cddc161cbc573aeaec8836",
+          "capturedSha256": "a63403a2472f8c14d9ac8ac94ef7e77d9e13844217cddc161cbc573aeaec8836",
+          "observedComplete": true,
+          "capturedComplete": true
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "observedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "capturedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "observedComplete": true,
+          "capturedComplete": true
+        },
+        "processPassed": true,
+        "metadataValid": true
+      },
+      {
+        "label": "runner-system-1",
+        "exitCode": 0,
+        "stop": null,
+        "reaped": true,
+        "started": true,
+        "elapsedMs": 24072,
+        "stdout": {
+          "observedBytes": 133117,
+          "capturedBytes": 133117,
+          "observedSha256": "c559e98279e8529b8b431a5400e4bd4f107ec2dce807d2c701cd8f654e1788b6",
+          "capturedSha256": "c559e98279e8529b8b431a5400e4bd4f107ec2dce807d2c701cd8f654e1788b6",
+          "observedComplete": true,
+          "capturedComplete": true
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "observedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "capturedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "observedComplete": true,
+          "capturedComplete": true
+        },
+        "processPassed": true,
+        "metadataValid": true,
+        "projection": {
+          "runtimeCount": 16,
+          "targetCount": 1,
+          "targetVersion": "18.5",
+          "targetAvailable": true
+        }
+      },
+      {
+        "label": "fresh-owned",
+        "exitCode": 0,
+        "stop": null,
+        "reaped": true,
+        "started": true,
+        "elapsedMs": 824,
+        "stdout": {
+          "observedBytes": 133117,
+          "capturedBytes": 133117,
+          "observedSha256": "c559e98279e8529b8b431a5400e4bd4f107ec2dce807d2c701cd8f654e1788b6",
+          "capturedSha256": "c559e98279e8529b8b431a5400e4bd4f107ec2dce807d2c701cd8f654e1788b6",
+          "observedComplete": true,
+          "capturedComplete": true
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "observedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "capturedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "observedComplete": true,
+          "capturedComplete": true
+        },
+        "processPassed": true,
+        "metadataValid": true,
+        "projection": {
+          "runtimeCount": 16,
+          "targetCount": 1,
+          "targetVersion": "18.5",
+          "targetAvailable": true
+        }
+      },
+      {
+        "label": "runner-system-2",
+        "exitCode": 0,
+        "stop": null,
+        "reaped": true,
+        "started": true,
+        "elapsedMs": 263,
+        "stdout": {
+          "observedBytes": 133117,
+          "capturedBytes": 133117,
+          "observedSha256": "c559e98279e8529b8b431a5400e4bd4f107ec2dce807d2c701cd8f654e1788b6",
+          "capturedSha256": "c559e98279e8529b8b431a5400e4bd4f107ec2dce807d2c701cd8f654e1788b6",
+          "observedComplete": true,
+          "capturedComplete": true
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "observedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "capturedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "observedComplete": true,
+          "capturedComplete": true
+        },
+        "processPassed": true,
+        "metadataValid": true,
+        "projection": {
+          "runtimeCount": 16,
+          "targetCount": 1,
+          "targetVersion": "18.5",
+          "targetAvailable": true
+        }
+      }
+    ],
+    "scope": {
+      "metadataOnly": true,
+      "runtimeQueries": 3,
+      "order": [
+        "runner-system-1",
+        "fresh-owned",
+        "runner-system-2"
+      ],
+      "xcode": "16.4",
+      "xcodeBuild": "16F6",
+      "sdk": "18.5",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-18-5"
+    },
+    "limits": {
+      "workSeconds": 270,
+      "cleanupSeconds": 30,
+      "querySeconds": 60,
+      "toolchainCheckSeconds": 20,
+      "termGraceSeconds": 3,
+      "postKillDrainSeconds": 3,
+      "stdoutBytes": 1048576,
+      "stderrBytes": 65536
+    },
+    "interpretation": "Only observed ordered profile differences; preceding queries can warm caches or services, so this does not establish TMPDIR causality or UI acceptance.",
+    "toolchainPassed": true,
+    "interrupted": null,
+    "processesReaped": true,
+    "cleanup": {
+      "status": "passed",
+      "ownedRootRemoved": true
+    },
+    "elapsedMs": 26705,
+    "finishedAt": "2026-11-02T09:12:35.422704+00:00"
+  },
+  "independentlyChecked": {
+    "runAndJobTerminalSuccess": true,
+    "runHeadMatchesPublishedWorkflow": true,
+    "uniqueRunHandleAndAttemptRetained": true,
+    "exactCommandLabelsAndOrder": true,
+    "allFiveSubprocessesStartedExitedZeroAndReaped": true,
+    "allStreamsCompleteWithinBounds": true,
+    "allThreeProfilesValidAndTargetAvailable": true,
+    "ownedCleanupPassed": true,
+    "workflowLocalBytesMatchPinnedGitBlob": true,
+    "existingUiWorkflowBytesMatchHead": true,
+    "controllerNotExecutedLocally": true
+  },
+  "observations": {
+    "runtimeQueryCount": 3,
+    "elapsedMsByProfile": [
+      {
+        "profile": "runner-system-1",
+        "elapsedMs": 24072
+      },
+      {
+        "profile": "fresh-owned",
+        "elapsedMs": 824
+      },
+      {
+        "profile": "runner-system-2",
+        "elapsedMs": 263
+      }
+    ],
+    "runtimeStdoutBytesEach": 133117,
+    "runtimeStdoutSha256Each": "c559e98279e8529b8b431a5400e4bd4f107ec2dce807d2c701cd8f654e1788b6",
+    "runtimeStderrBytesEach": 0,
+    "runtimeCountEach": 16,
+    "targetMatchesEach": 1,
+    "targetVersionEach": "18.5",
+    "targetAvailableEach": true,
+    "interpretation": "The first runner-system query was slower than both later queries. All three observed stdout streams were byte-identical by recorded complete-stream SHA-256. Query order and prior CoreSimulator service/cache warming prevent a TMPDIR-causality conclusion."
+  },
+  "scopeLimits": [
+    "Only the fixed Xcode/version and SDK checks plus three list-runtimes commands ran. No checkout, build, product import, test, simulator create/boot/shutdown/delete, runtime installation, notification, signing or store operation occurred in this probe.",
+    "The child environment was the existing UI controller's minimal profile; only TMPDIR differed for the middle query. Private paths and environment values were not dumped.",
+    "Metadata queries can start or warm ordinary CoreSimulator services/caches. This is not a claim of a system-write sandbox or globally pristine state.",
+    "The fresh-owned query followed a successful runner-system query. The A-B-A sequence is one observed run, without independent cold profiles, causal isolation, repeatability or universal runtime guarantees.",
+    "No UI acceptance, physical-device behavior, app persistence, notification behavior or resolution of prior UI failures is established. Earlier failed attempts and their simulator-cleanup failures remain unchanged.",
+    "All five subprocess exit codes were recorded as zero; the controller's numeric exit was not separately printed, while its actual GitHub step/job/run conclusions were success.",
+    "Cleanup proves removal of this probe's nonce/device/inode-checked temporary root only. There was no global process or CoreSimulator cleanup, provider/model call, paid resource or new account.",
+    "The full application and portfolio objective remains unfinished. Root owns independent review, the next bounded action, workflow retirement and publication."
+  ],
+  "publication": "Only these two result files were authored locally by this agent. No source edit, run restart, dispatch, UI retry, commit or push was performed."
+}
