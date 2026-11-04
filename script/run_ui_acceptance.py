@@ -16,7 +16,7 @@ import tempfile
 import time
 import uuid
 
-SEAL = "docs/results/2026/11-03/ui-acceptance-source-single-run.json"
+SEAL = "docs/results/2026/11-04/ui-acceptance-source-native-uuid.json"
 WORKFLOW = ".github/workflows/ui-acceptance.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
@@ -41,7 +41,7 @@ def sha(data):
 
 def identifier(value):
     require(isinstance(value, str) and re.fullmatch(r"[0-9a-fA-F-]{36}", value), "device_uuid_invalid")
-    return str(uuid.UUID(value))
+    return str(uuid.UUID(value)).upper()
 
 
 class Acceptance:
@@ -164,10 +164,49 @@ class Acceptance:
                     if re.search(rb"\berror:|Test Case .*failed|Assertion Failure", line, re.I):
                         row["firstFailureMessagesByStream"][name] = self.clean(line, 1500, head=True)
                         break
+            if label == "ui-test":
+                try:
+                    evidence = self.destination_diagnostic(err)
+                    if evidence is not None:
+                        row["destinationEvidence"] = evidence
+                except Exception:
+                    row["destinationEvidence"] = {"diagnosticOnly": True, "status": "unavailable"}
         row["reaped"] = p.poll() is not None
         self.commands.append(row)
         require(accept_failure or (code == 0 and reason is None), label + "_failed")
         return out, row
+
+    def destination_diagnostic(self, data):
+        lines = data.splitlines()
+        head = next((i for i, line in enumerate(lines)
+                     if b"xcodebuild: error:" in line.lower() and b"destination" in line.lower()), None)
+        if head is None:
+            return None
+        tokens = [value.encode().lower() for value in
+                  (self.simulator, self.planned.get("name") if self.planned else None) if value]
+        matches, total, section = [], 0, "unclassified"
+        for number, line in enumerate(lines, 1):
+            lower = line.lower()
+            if b"available destinations" in lower:
+                section = "available"
+            elif b"ineligible destinations" in lower:
+                section = "ineligible"
+            if any(token in lower for token in tokens):
+                total += 1
+                if len(matches) < 4:
+                    matches.append({"sourceLine": number, "section": section,
+                                    "text": self.clean(line, 384, head=True)})
+        evidence = {"diagnosticOnly": True, "source": "ui-test.stderr", "sourceLines": len(lines),
+                    "errorHead": {"sourceLine": head + 1, "text": self.clean(lines[head], 500, head=True)},
+                    "ownedDestinationLines": matches, "ownedMatchingLineCount": total,
+                    "omittedMatchingLines": total - len(matches)}
+        # Leave room for the field wrapper within the three-KiB diagnostic cap.
+        while len(json.dumps(evidence, separators=(",", ":")).encode()) > 3000 and matches:
+            matches.pop()
+            evidence["omittedMatchingLines"] = total - len(matches)
+        if len(json.dumps(evidence, separators=(",", ":")).encode()) > 3000:
+            return {"diagnosticOnly": True, "status": "unavailable", "reason": "destination_evidence_bound"}
+        return evidence
 
     def json_command(self, label, args, cleanup=False, seconds=30):
         raw, _ = self.run(label, args, seconds=seconds, cap=1024 * 1024, cleanup=cleanup)

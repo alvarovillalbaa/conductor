@@ -35,11 +35,29 @@ iteration. The xcresult's failed node is an argument-error placeholder, not an
 execution of the authored UI case. Successful bootstrap on this runner does not
 establish a `TMPDIR` cause for earlier timeouts.
 
-This unrun CLI repair removes only that argument pair and uses Xcode's default
+The single-execution CLI repair removed that argument pair and uses Xcode's default
 single execution, with no repetition or retry flag. The exact selected UI case,
 parallel-testing setting, actual exit check, strict one-passed-case xcresult
-identity/totals gates and all other resources remain unchanged. No execution of
-this revision or UI acceptance is claimed. Root publishes this preparation and
+identity/totals gates and all other resources remain unchanged.
+[Attempt 5](../results/2026/11-03/ui-acceptance-attempt-5.md) stopped at the initial
+runtime query. Its one terminal-job retry, [attempt 6](../results/2026/11-04/ui-acceptance-attempt-6.md),
+created and booted the owned simulator and verified deletion, but Xcode exited 70
+because it could not match the destination. Neither attempt ran the authored UI case.
+
+The complete 37-byte create-stream hash matches the native uppercase UUID plus
+newline; the controller had normalized that same numeric UUID to lowercase.
+This next interoperability repair returns canonical uppercase UUIDs while retaining
+all numeric identity, metadata/ledger comparisons, exact runtime/device pins and
+the single case. Casing causality remains unproven because the old complete Xcode
+destination list was not retained.
+
+Diagnostic-only failure evidence retains a bounded destination-error head and up
+to four lines matching only the owned UUID/name, with original source line indices
+and Available/Ineligible section labels. Its serialized field remains below
+three KiB, after existing path/control sanitization, and never affects acceptance.
+All other command flags, environment, deadlines, output limits and cleanup checks
+remain unchanged. This new revision has not executed and supplies no UI pass.
+Root publishes this preparation and
 seal first, then pins separate activation. Both temporary UI and metadata-probe
 workflows must be absent from the pinned preparation commit.
 
@@ -66,7 +84,7 @@ intersection with `com.apple.CoreSimulator.SimDeviceType.iPhone-16`.
 It never downloads a runtime/SDK/package or substitutes a device/version.
 `DEVELOPER_DIR` selects the preinstalled toolchain without changing global settings.
 
-The [source seal](../results/2026/11-03/ui-acceptance-source-single-run.json) is
+The [source seal](../results/2026/11-04/ui-acceptance-source-native-uuid.json) is
 `conductor.ui-acceptance-source.v1`: complete `files` entries
 `{path,mode,gitBlob,bytes,sha256}`, `fileCount`, `totalBytes`,
 `excludedPrefixes:["docs/results/"]` and the exact scope recorded by the controller.

@@ -1,0 +1,658 @@
+{
+  "schemaVersion": "conductor.ui-acceptance-receipt.v1",
+  "status": "failed-destination-selection",
+  "executionDateUtc": "2026-11-04",
+  "observedAtUtc": "2026-11-04T10:22:54Z",
+  "authoredLocalDate": "2026-11-04",
+  "authoredTimezone": "Europe/Madrid",
+  "retryQualification": {
+    "logicalAttempt": 6,
+    "githubRunAttempt": 2,
+    "previousLogicalAttemptReceipt": "../11-03/ui-acceptance-attempt-5.json",
+    "previousJobId": 126273530467,
+    "scope": "One owner-authorized retry of a terminal failed job, with identical source/configuration; no observation-timeout restart or additional retry by receipt author."
+  },
+  "source": {
+    "repository": "alvarovillalbaa/conductor",
+    "commit": "928c70ca31b1b2d2631da5df23439cc7b32a0d35",
+    "tree": "bee633ac985ac34a11f50ecfc3aa1be03e65aa34",
+    "sealPath": "docs/results/2026/11-03/ui-acceptance-source-single-run.json",
+    "sealSha256": "91c37ee95f612802ecd162fa207687039d34e24a601006e898681f10322dd6a6",
+    "controllerSha256": "55871714dbafc641b47f0619a4081a7f00b1b094312d8dfd78efe6642782efc1"
+  },
+  "activation": {
+    "commit": "2f87c04ee156836a9f3ee30ca06d20f51ccb1473",
+    "tree": "f7b8f723fda2453977c32e524b4da82b2d9e20bb",
+    "workflowPath": ".github/workflows/ui-acceptance.yml"
+  },
+  "run": {
+    "id": 41738433727,
+    "url": "https://github.com/alvarovillalbaa/conductor/actions/runs/41738433727",
+    "attempt": 2,
+    "event": "push",
+    "headSha": "2f87c04ee156836a9f3ee30ca06d20f51ccb1473",
+    "status": "completed",
+    "conclusion": "failure",
+    "createdAt": "2026-11-03T23:21:00Z",
+    "startedAt": "2026-11-04T10:11:47Z",
+    "updatedAt": "2026-11-04T10:18:40Z"
+  },
+  "job": {
+    "id": 126515154346,
+    "name": "ui-acceptance",
+    "status": "completed",
+    "conclusion": "failure",
+    "startedAt": "2026-11-04T10:11:54Z",
+    "completedAt": "2026-11-04T10:18:40Z",
+    "steps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "One source-pinned UI case with guarded simulator cleanup",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "Post Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "reportEvidence": {
+    "jobLogUrl": "https://github.com/alvarovillalbaa/conductor/actions/runs/41738433727/job/126515154346",
+    "rawJsonBytes": 12655,
+    "rawJsonSha256": "de09f610c8c69247808b249eb6160ce1625cd3eda72f8096a8f7e62a41889a19",
+    "rawHashScope": "Exact compact ASCII-escaped Python controller JSON excluding log prefix/newline; retained-object ASCII reserialization was verified byte-identical before receipt generation.",
+    "fullControllerReportRetained": true
+  },
+  "controllerReport": {
+    "schemaVersion": "conductor.ui-acceptance.v1",
+    "sourceCommit": "928c70ca31b1b2d2631da5df23439cc7b32a0d35",
+    "scope": {
+      "scheme": "ConductorUIAcceptance",
+      "testIdentifier": "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion",
+      "expectedCases": 1,
+      "xcodeVersion": "16.4",
+      "xcodeBuild": "16F6",
+      "sdk": "18.5",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+      "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-16"
+    },
+    "status": "failed",
+    "commands": [
+      {
+        "label": "beforeSourceGuard-head",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 41,
+          "capturedBytes": 41,
+          "sha256": "4a2ba0115a67aab375f01627278d6d73a77c492a5a7dac544f0e5e6385056eda"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "beforeSourceGuard-seal",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 17075,
+          "capturedBytes": 17075,
+          "sha256": "91c37ee95f612802ecd162fa207687039d34e24a601006e898681f10322dd6a6"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "beforeSourceGuard-index",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 6736,
+          "capturedBytes": 6736,
+          "sha256": "7336b192baadba32e3ab71137373f8f4f0806f14545f86efdf64cf8563e45f0d"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "beforeSourceGuard-tree",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 6958,
+          "capturedBytes": 6958,
+          "sha256": "1217f8462f4a58ded6c52f14791f399e3df8cd825f694ecf56b294f6ac4358ca"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "xcode",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 30,
+          "capturedBytes": 30,
+          "sha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "sdk",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 5,
+          "capturedBytes": 5,
+          "sha256": "a63403a2472f8c14d9ac8ac94ef7e77d9e13844217cddc161cbc573aeaec8836"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "runtimes",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 133117,
+          "capturedBytes": 133117,
+          "sha256": "c559e98279e8529b8b431a5400e4bd4f107ec2dce807d2c701cd8f654e1788b6"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "device-types",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 60485,
+          "capturedBytes": 60485,
+          "sha256": "eaa4e52bb47a019e54e6f57af943a698eec13f24e346c056dfa628c5f27c7272"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "devices",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 71890,
+          "capturedBytes": 71890,
+          "sha256": "37f4c17927acec0a070fd79324876630f96cce9f1132f623f08d0ca6bbcd70ce"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "create",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 37,
+          "capturedBytes": 37,
+          "sha256": "3dedfa5077bfea21c23d75472fa1757fb43331f73a8ea7e69ac2c6bd1fbe9322"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "devices",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 72443,
+          "capturedBytes": 72443,
+          "sha256": "dcdb66d801e40e97ed12c1d4f8f581ddd7dba14c3262a9cf1a6a84857597b1bb"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "boot",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "boot-status",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 4152,
+          "capturedBytes": 4152,
+          "sha256": "c8d1a23042dc738ef2716fd6419cef918a433253a3df1c46b013f29c1d6df5a0"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "devices",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 72522,
+          "capturedBytes": 72522,
+          "sha256": "46bf4a2b203236d213737e41fceed2bc40406328bde7c1814659c813bccf83ae"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "ui-test",
+        "exitCode": 70,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 1051,
+          "capturedBytes": 1051,
+          "sha256": "5c8453354f9aaed8bfce1ac545f986f727417b4c7c4fd79f47bc38eb54fb6a11"
+        },
+        "stderr": {
+          "observedBytes": 23736,
+          "capturedBytes": 23736,
+          "sha256": "8f599ed42a6a3b92b6d6433410585a13055bbc75b0caa1906e485ac556d5ab22"
+        },
+        "failureTail": "\t\t{ platform:iOS Simulator, arch:arm64, id:B14FB39F-B472-4A78-A1DC-CBFDD8EDACA7, OS:26.1, name:iPhone Air }\n\t\t{ platform:iOS Simulator, arch:x86_64, id:B14FB39F-B472-4A78-A1DC-CBFDD8EDACA7, OS:26.1, name:iPhone Air }\n\t\t{ platform:iOS Simulator, arch:arm64, id:6C2153FE-DEAE-4712-8816-98E12A7AFEE0, OS:26.2, name:iPhone Air }\n\t\t{ platform:iOS Simulator, arch:x86_64, id:6C2153FE-DEAE-4712-8816-98E12A7AFEE0, OS:26.2, name:iPhone Air }\n\t\t{ platform:iOS Simulator, arch:arm64, id:4B35B468-69CD-4004-BDA9-463359998DBA, OS:18.5, name:iPhone SE (3rd generation) }\n\t\t{ platform:iOS Simulator, arch:x86_64, id:4B35B468-69CD-4004-BDA9-463359998DBA, OS:18.5, name:iPhone SE (3rd generation) }\n\t\t{ platform:iOS Simulator, arch:arm64, id:4F81E126-BE3E-449A-94EC-1FD73DB135B2, OS:18.6, name:iPhone SE (3rd generation) }\n\t\t{ platform:iOS Simulator, arch:x86_64, id:4F81E126-BE3E-449A-94EC-1FD73DB135B2, OS:18.6, name:iPhone SE (3rd generation) }\n\t\t{ platform:iOS Simulator, arch:arm64, id:FE1ABE1D-2635-4135-8D2E-3408DF5178D4, OS:26.0.1, name:iPhone SE (3rd generation) }\n\t\t{ platform:iOS Simulator, arch:x86_64, id:FE1ABE1D-2635-4135-8D2E-3408DF5178D4, OS:26.0.1, name:iPhone SE (3rd generation) }\n\t\t{ platform:iOS Simulator, arch:arm64, id:7C068BBB-07E2-43EA-9DF8-45BC30A1157B, OS:26.1, name:iPhone SE (3rd generation) }\n\t\t{ platform:iOS Simulator, arch:x86_64, id:7C068BBB-07E2-43EA-9DF8-45BC30A1157B, OS:26.1, name:iPhone SE (3rd generation) }\n\t\t{ platform:iOS Simulator, arch:arm64, id:B220EC43-535F-472F-935A-5B2D0E9F2975, OS:26.2, name:iPhone SE (3rd generation) }\n\t\t{ platform:iOS Simulator, arch:x86_64, id:B220EC43-535F-472F-935A-5B2D0E9F2975, OS:26.2, name:iPhone SE (3rd generation) }\n\n\tIneligible destinations for the \"ConductorUIAcceptance\" scheme:\n\t\t{ platform:macOS, variant:Mac Catalyst, name:Any Mac, error:Any Mac’s macOS platform doesn’t match ConductorUITests.xctest’s supported platforms. You can change ConductorUITests.xctest’s Base SDK or Supported Platforms to support Any Mac. }\n",
+        "firstFailureMessagesByStream": {
+          "stderr": "xcodebuild: error: Unable to find a device matching the provided destination specifier:"
+        },
+        "reaped": true
+      },
+      {
+        "label": "result-summary",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 25404,
+          "capturedBytes": 25404,
+          "sha256": "07bdae592d51e7860ff0e01ac5327ddd4bedf2d4a982e6146957ed74e66ba856"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "result-tests",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 25641,
+          "capturedBytes": 25641,
+          "sha256": "7006e17dc8c73a82c90cc18f7f55813eacebd1f0467468b1692c33070167e3c7"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "afterSourceGuard-head",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 41,
+          "capturedBytes": 41,
+          "sha256": "4a2ba0115a67aab375f01627278d6d73a77c492a5a7dac544f0e5e6385056eda"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "afterSourceGuard-seal",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 17075,
+          "capturedBytes": 17075,
+          "sha256": "91c37ee95f612802ecd162fa207687039d34e24a601006e898681f10322dd6a6"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "afterSourceGuard-index",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 6736,
+          "capturedBytes": 6736,
+          "sha256": "7336b192baadba32e3ab71137373f8f4f0806f14545f86efdf64cf8563e45f0d"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "afterSourceGuard-tree",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 6958,
+          "capturedBytes": 6958,
+          "sha256": "1217f8462f4a58ded6c52f14791f399e3df8cd825f694ecf56b294f6ac4358ca"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "cleanup-devices",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 72522,
+          "capturedBytes": 72522,
+          "sha256": "0ab0b0c1fdc0adc4d9e0b545afdf885a2d63a66fb808a536c1fb649ad3e92c7c"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "shutdown",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "cleanup-devices",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 72524,
+          "capturedBytes": 72524,
+          "sha256": "bb313cf7d00e3d2f3a352b0c4970ae3dd838d1d99cd11b4d9e28d4ad83a72d27"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "delete",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      },
+      {
+        "label": "cleanup-devices",
+        "exitCode": 0,
+        "stop": null,
+        "stdout": {
+          "observedBytes": 71890,
+          "capturedBytes": 71890,
+          "sha256": "37f4c17927acec0a070fd79324876630f96cce9f1132f623f08d0ca6bbcd70ce"
+        },
+        "stderr": {
+          "observedBytes": 0,
+          "capturedBytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reaped": true
+      }
+    ],
+    "screenshots": {
+      "pixelsRetained": false,
+      "viewed": false,
+      "metadata": []
+    },
+    "beforeSourceGuard": {
+      "passed": true,
+      "files": 51,
+      "totalBytes": 200788,
+      "sealSha256": "91c37ee95f612802ecd162fa207687039d34e24a601006e898681f10322dd6a6"
+    },
+    "toolchain": {
+      "xcode": "Xcode 16.4\nBuild version 16F6",
+      "sdk": "18.5",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+      "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-16"
+    },
+    "createdSimulator": {
+      "name": "conductor-ui-98c666d416a44c5ca0a51db745b398a1",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+      "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-16",
+      "uuid": "ca589558-b0b8-49d3-a6f4-cdf00f566b63"
+    },
+    "xcresult": {
+      "summarySha256": "07bdae592d51e7860ff0e01ac5327ddd4bedf2d4a982e6146957ed74e66ba856",
+      "summary": {
+        "totalTestCount": 1,
+        "passedTests": 0,
+        "failedTests": 1,
+        "skippedTests": 0,
+        "testResults": null
+      },
+      "testFailures": [
+        {
+          "testName": "(Unspecified summary)"
+        }
+      ],
+      "testFailureCount": 1,
+      "testsSha256": "7006e17dc8c73a82c90cc18f7f55813eacebd1f0467468b1692c33070167e3c7",
+      "cases": [
+        {
+          "name": "(Unspecified summary)",
+          "parents": [
+            "Test Plan",
+            "ConductorUITests.xctest",
+            "(Unspecified summary)"
+          ],
+          "status": "Failed",
+          "identifier": "D63B11D7-B65D-423F-9610-5953C2F2293D"
+        }
+      ]
+    },
+    "afterSourceGuard": {
+      "passed": true,
+      "files": 51,
+      "totalBytes": 200788,
+      "sealSha256": "91c37ee95f612802ecd162fa207687039d34e24a601006e898681f10322dd6a6"
+    },
+    "ownedSimulator": {
+      "uuid": "ca589558-b0b8-49d3-a6f4-cdf00f566b63",
+      "name": "conductor-ui-98c666d416a44c5ca0a51db745b398a1",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+      "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-16",
+      "state": "Booted"
+    },
+    "simulatorCleanup": "passed",
+    "scratchCleanup": "passed",
+    "errors": [
+      "Refused:xcresult_case_identity_or_status"
+    ],
+    "processesReaped": true,
+    "interrupted": false
+  },
+  "acceptance": {
+    "authoredUiCasesExecuted": 0,
+    "authoredUiCasePassed": false,
+    "xcodebuildInvoked": true,
+    "xcodebuildExitCode": 70,
+    "appBuildSuccessEstablished": false,
+    "appBuildProgressQualification": "Retained bounded output establishes destination-selection failure, not a successful app build.",
+    "actualError": "xcodebuild: error: Unable to find a device matching the provided destination specifier:",
+    "xcresultQualification": "The1failed node is a generic(Unspecified summary) placeholder rather than the selected authored UI case; strict identity/status acceptance rejected it.",
+    "priorIterationArgumentErrorObserved": false
+  },
+  "destinationEvidence": {
+    "createdSimulator": {
+      "name": "conductor-ui-98c666d416a44c5ca0a51db745b398a1",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+      "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-16",
+      "uuid": "ca589558-b0b8-49d3-a6f4-cdf00f566b63"
+    },
+    "ownedInventorySnapshot": {
+      "uuid": "ca589558-b0b8-49d3-a6f4-cdf00f566b63",
+      "name": "conductor-ui-98c666d416a44c5ca0a51db745b398a1",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+      "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-16",
+      "state": "Booted"
+    },
+    "requestedSpecifierFromGuardedSource": "id=ca589558-b0b8-49d3-a6f4-cdf00f566b63",
+    "requestedSpecifierQualification": "The pinned controller concatenates id= with its normalized owned UUID; full CLI stdout was hashed rather than retained.",
+    "nativeCreateSpelling": {
+      "candidate": "CA589558-B0B8-49D3-A6F4-CDF00F566B63\n",
+      "candidateBytes": 37,
+      "actualCreateStdoutSha256": "3dedfa5077bfea21c23d75472fa1757fb43331f73a8ea7e69ac2c6bd1fbe9322",
+      "verifiedCandidateHash": "3dedfa5077bfea21c23d75472fa1757fb43331f73a8ea7e69ac2c6bd1fbe9322",
+      "qualification": "Matching the complete37-byte create stream hash establishes its uppercase spelling; it does not establish the cause of Xcode destination rejection."
+    },
+    "cause": "unproven: the old full destination list was not retained; its bounded tail and first error line are preserved in controllerReport."
+  },
+  "sourceGuards": {
+    "before": {
+      "passed": true,
+      "files": 51,
+      "totalBytes": 200788,
+      "sealSha256": "91c37ee95f612802ecd162fa207687039d34e24a601006e898681f10322dd6a6"
+    },
+    "after": {
+      "passed": true,
+      "files": 51,
+      "totalBytes": 200788,
+      "sealSha256": "91c37ee95f612802ecd162fa207687039d34e24a601006e898681f10322dd6a6"
+    }
+  },
+  "cleanup": {
+    "processesReaped": true,
+    "scratchCleanup": "passed",
+    "simulatorCleanup": "passed",
+    "shutdownCommandExit": 0,
+    "ownedIdentityRevalidatedBeforeDelete": true,
+    "deleteCommandExit": 0,
+    "postDeleteOwnedInventoryAbsent": true,
+    "qualification": "Shutdown exited0; ownership was revalidated before deletion and final guarded inventory confirmed absence. No separate post-shutdown state projection was retained."
+  },
+  "proofLimits": [
+    "All26 command rows and complete xcresult projection are retained verbatim.25 subprocesses exited0; ui-test exited70 without a controller timeout, and all were reaped.",
+    "Both51-input source guards passed200,788bytes. The exact owned simulator was created/booted and deleted with final absence verification; this is resource evidence, not UI acceptance.",
+    "No authored UI case or successful app build was established. The generic failed xcresult node is not counted as an executed authored case; no screenshot pixels were retained or viewed.",
+    "The previous attempt5 runtime timeout remains separately preserved. This retry's successful metadata/bootstrap does not establish TMPDIR causality or repeatability.",
+    "No source repair, additional retry, configuration/deadline relaxation, workflow retirement or publication is included; owner reviews actual evidence before any next action."
+  ]
+}
