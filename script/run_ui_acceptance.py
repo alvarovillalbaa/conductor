@@ -16,11 +16,12 @@ import tempfile
 import time
 import uuid
 
-SEAL = "docs/results/2026/11-04/ui-acceptance-source-native-uuid.json"
+SEAL = "docs/results/2026/11-04/ui-acceptance-source-arm64.json"
 WORKFLOW = ".github/workflows/ui-acceptance.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
          "xcodeVersion": "16.4", "xcodeBuild": "16F6", "sdk": "18.5",
+         "architecture": "arm64",
          "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
          "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-16"}
 ATTACHMENTS = {"paused-after-relaunch", "done-after-relaunch"}
@@ -295,6 +296,9 @@ class Acceptance:
                 "deviceType": row["deviceTypeIdentifier"], "state": row.get("state")}
 
     def prepare(self):
+        architecture = os.uname().machine
+        self.report["toolchain"] = {"architecture": architecture}
+        require(architecture == SCOPE["architecture"], "runner_architecture_unavailable")
         self.guard("beforeSourceGuard")
         version = self.run("xcode", ["xcodebuild", "-version"])[0].decode().strip()
         require(version == "Xcode 16.4\nBuild version 16F6", "xcode_pin_unavailable")
@@ -310,7 +314,7 @@ class Acceptance:
         types, _ = self.json_command("device-types", ["xcrun", "simctl", "list", "devicetypes", "-j"])
         require(any(r.get("identifier") == SCOPE["deviceType"] and r.get("name") == "iPhone 16"
                     for r in types.get("devicetypes", [])), "device_type_unavailable")
-        self.report["toolchain"] = {"xcode": version, "sdk": sdk, "runtime": SCOPE["runtime"], "deviceType": SCOPE["deviceType"]}
+        self.report["toolchain"].update({"xcode": version, "sdk": sdk, "runtime": SCOPE["runtime"], "deviceType": SCOPE["deviceType"]})
         self.planned = {"name": "conductor-ui-" + self.nonce, "runtime": SCOPE["runtime"], "deviceType": SCOPE["deviceType"]}
         require(not any(r.get("name") == self.planned["name"] for _, r in self.devices()), "device_name_already_exists")
         self.write_ledger("planned-device.json", self.planned)
@@ -346,12 +350,12 @@ class Acceptance:
     def test(self):
         result = self.root / "ui.xcresult"
         _, outcome = self.run("ui-test", ["xcodebuild", "-project", "Conductor.xcodeproj", "-scheme", SCOPE["scheme"],
-            "-configuration", "Debug", "-sdk", "iphonesimulator", "-destination", "id=" + self.simulator,
+            "-configuration", "Debug", "-sdk", "iphonesimulator", "-destination", "platform=iOS Simulator,id=" + self.simulator + ",arch=arm64",
             "-destination-timeout", "60", "-derivedDataPath", str(self.root / "DerivedData"),
             "-resultBundlePath", str(result), "-resultBundleVersion", "3", "-only-testing:" + CASE,
             "-parallel-testing-enabled", "NO", "-enableCodeCoverage", "NO",
             "-test-timeouts-enabled", "YES",
-            "-disableAutomaticPackageResolution", "-skipPackageUpdates", "CODE_SIGNING_ALLOWED=NO", "test"],
+            "-disableAutomaticPackageResolution", "-skipPackageUpdates", "CODE_SIGNING_ALLOWED=NO", "ARCHS=arm64", "ONLY_ACTIVE_ARCH=YES", "test"],
             seconds=600, cap=4 * 1024 * 1024, accept_failure=True)
         summary, summary_raw = self.json_command("result-summary", ["xcrun", "xcresulttool", "get", "test-results", "summary", "--path", str(result)])
         failures = summary.get("testFailures")

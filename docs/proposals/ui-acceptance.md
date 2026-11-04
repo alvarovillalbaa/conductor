@@ -46,7 +46,7 @@ because it could not match the destination. Neither attempt ran the authored UI 
 
 The complete 37-byte create-stream hash matches the native uppercase UUID plus
 newline; the controller had normalized that same numeric UUID to lowercase.
-This next interoperability repair returns canonical uppercase UUIDs while retaining
+The interoperability repair returns canonical uppercase UUIDs while retaining
 all numeric identity, metadata/ledger comparisons, exact runtime/device pins and
 the single case. Casing causality remains unproven because the old complete Xcode
 destination list was not retained.
@@ -55,8 +55,22 @@ Diagnostic-only failure evidence retains a bounded destination-error head and up
 to four lines matching only the owned UUID/name, with original source line indices
 and Available/Ineligible section labels. Its serialized field remains below
 three KiB, after existing path/control sanitization, and never affects acceptance.
-All other command flags, environment, deadlines, output limits and cleanup checks
-remain unchanged. This new revision has not executed and supplies no UI pass.
+The [seventh attempt](../results/2026/11-04/ui-acceptance-attempt-7.md) selected its
+owned destination but Xcode warned that both arm64 and x86_64 matched. Compilation
+failed because `ConductorCore` was available for arm64 but missing for the x86_64
+simulator target. Xcode exited 65; xcresult contained zero cases, and both source
+guards and verified owned deletion passed. No authored UI case executed.
+
+This next bounded profile requires the actual `os.uname().machine` value to be
+exactly `arm64` at prepare entry, before Apple tool or simulator operations, and
+records it in toolchain evidence. The existing owned controller scratch lifecycle
+is unchanged. Xcode receives the same owned UUID with explicit iOS Simulator and
+arm64 destination qualifiers, `ARCHS=arm64` and `ONLY_ACTIVE_ARCH=YES`. This aligns
+the app, UI target and local SwiftPM package for one architecture without changing
+the project, Swift source, package or UI case. There is no architecture fallback
+or portability claim. All other flags, environment, deadlines, output limits and
+identity/source/cleanup gates remain unchanged. This revision has not executed
+and supplies no build or UI pass.
 Root publishes this preparation and
 seal first, then pins separate activation. Both temporary UI and metadata-probe
 workflows must be absent from the pinned preparation commit.
@@ -78,13 +92,13 @@ requests; reminders remain disabled by default.
 
 [`script/run_ui_acceptance.py`](../../script/run_ui_acceptance.py) uses Python
 stdlib only. Before creating a simulator it requires exact Xcode **16.4 (16F6)**,
-iPhoneSimulator SDK **18.5**, available runtime
+iPhoneSimulator SDK **18.5**, an actual **arm64** host, available runtime
 `com.apple.CoreSimulator.SimRuntime.iOS-18-5` and explicit supported-device
 intersection with `com.apple.CoreSimulator.SimDeviceType.iPhone-16`.
 It never downloads a runtime/SDK/package or substitutes a device/version.
 `DEVELOPER_DIR` selects the preinstalled toolchain without changing global settings.
 
-The [source seal](../results/2026/11-04/ui-acceptance-source-native-uuid.json) is
+The [source seal](../results/2026/11-04/ui-acceptance-source-arm64.json) is
 `conductor.ui-acceptance-source.v1`: complete `files` entries
 `{path,mode,gitBlob,bytes,sha256}`, `fileCount`, `totalBytes`,
 `excludedPrefixes:["docs/results/"]` and the exact scope recorded by the controller.
@@ -105,7 +119,8 @@ evidence of creation, not evidence of shutdown/deletion, and never bypasses
 current metadata verification for cleanup.
 
 The exact `xcodebuild test` selection uses default single execution without any
-repetition/retry flag, parallel testing off,
+repetition/retry flag, parallel testing off, the owned arm64 simulator destination,
+`ARCHS=arm64`, `ONLY_ACTIVE_ARCH=YES`,
 `CODE_SIGNING_ALLOWED=NO`, no code coverage or package update/resolution, and
 owned DerivedData/result paths. Commands have bounded time/output and dedicated
 process groups. The first runtime-list query and normal/cleanup device inventories
