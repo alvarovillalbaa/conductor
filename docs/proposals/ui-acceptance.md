@@ -1,7 +1,10 @@
-# One real UI acceptance case — source preparation
+# One real UI acceptance case — status and source contract
 
-Original preparation: 31 October 2026. Update: 4 November 2026. The current owner
-instruction covers one public `macos-15` job, capped at 20 minutes.
+Original preparation: 31 October 2026. Update: 4 November 2026. The prepared scope
+is one public `macos-15` job, capped at 20 minutes. UI acceptance remains unmet;
+further execution is pending an external tool/service change or an
+evidence-supported source repair. No unchanged retry, timeout increase or weakened
+identity gate is scheduled.
 [Attempt 1](../results/2026/10-31/ui-acceptance-attempt-1.md) reached the first
 installed-runtime query's 30-second deadline before simulator creation or UI
 execution. That timeout does not establish runtime absence or a transient cause.
@@ -76,7 +79,7 @@ SwiftUI source, but the retained evidence does not show the actual accessibility
 element type or establish the failed query's cause. Both source guards and
 verified resource cleanup passed.
 
-This new diagnostic-only revision retains that exact typed query, one ten-second
+The diagnostic-only revision retains that exact typed query, one ten-second
 wait, assertion and every later action. Only if the wait fails, the test prints
 one fixed marker and a JSON projection of at most 16 actual elements whose
 identifier starts with `plan.` or whose label is exactly `New Plan`. Each record
@@ -94,10 +97,23 @@ than four KiB with original stream/line provenance. Diagnostics never supply an
 alternative query, action or acceptance result. No locator/product repair,
 timeout increase, fallback or retry is included. All app/core/project sources,
 architecture/flags, deadlines and identity/source/cleanup gates are unchanged.
-This diagnostic revision has not executed and provides no new UI pass.
-Root publishes this preparation and
-seal first, then pins separate activation. Both temporary UI and metadata-probe
-workflows must be absent from the pinned preparation commit.
+[Attempt 9](../results/2026/11-04/ui-acceptance-attempt-9.md) executed this controller
+on actual arm64 and created/booted its owned simulator, then the normal post-boot
+device inventory reached its unchanged 90-second deadline with no output. No
+app build, UI case, xcresult or Stepper marker was reached. Both source guards
+passed; later cleanup found the owned simulator Booted, verified its deletion,
+removed scratch and reaped all 23 subprocesses. The service timeout's cause and
+the prior query's actual accessibility type remain unproven. No diagnostic-based
+locator repair or passing alternative is justified by this attempt.
+
+The checked preparation was `ca8fb846490fb587730ead0029644182b4013206`, with both
+temporary workflows absent; separate activation produced attempt 9. This later
+documentation edition changes only this file and `README.md`, leaving the other
+49 sealed inputs unchanged. All original receipts and source seals remain
+immutable; reproduce the pinned preparation rather than apply its old seal to
+this later documentation edition. Future execution must retain the same source,
+identity, exact-case, exit/count and cleanup requirements unless an explicit
+evidence-supported repair changes the recorded contract.
 
 The sole scheme is `ConductorUIAcceptance`; the sole selection is
 `ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion`.
@@ -167,8 +183,10 @@ and cleanup. Unknown/malformed xcresult schemas fail closed. No core-case count
 or static build is substituted for this UI result. The pinned tool's modern
 `xcresulttool get test-results summary/tests/activities` commands provide bounded
 metadata. Apple's [Xcode 16.3 notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-16_3-release-notes)
-document these interfaces and their command help; actual schema compatibility
-still requires the future recorded CI run.
+document these interfaces and their command help. Earlier attempts decoded the
+summary/tests interfaces, including attempt 8's actual failed authored case.
+The optional activities/screenshot metadata path has not been reached by a
+passing case and remains unverified.
 
 The UI test attaches `paused-after-relaunch` and `done-after-relaunch` screenshots.
 If available, the controller retains only matching attachment metadata and the
