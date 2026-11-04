@@ -61,16 +61,40 @@ failed because `ConductorCore` was available for arm64 but missing for the x86_6
 simulator target. Xcode exited 65; xcresult contained zero cases, and both source
 guards and verified owned deletion passed. No authored UI case executed.
 
-This next bounded profile requires the actual `os.uname().machine` value to be
+The bounded profile requires the actual `os.uname().machine` value to be
 exactly `arm64` at prepare entry, before Apple tool or simulator operations, and
 records it in toolchain evidence. The existing owned controller scratch lifecycle
 is unchanged. Xcode receives the same owned UUID with explicit iOS Simulator and
 arm64 destination qualifiers, `ARCHS=arm64` and `ONLY_ACTIVE_ARCH=YES`. This aligns
 the app, UI target and local SwiftPM package for one architecture without changing
 the project, Swift source, package or UI case. There is no architecture fallback
-or portability claim. All other flags, environment, deadlines, output limits and
-identity/source/cleanup gates remain unchanged. This revision has not executed
-and supplies no build or UI pass.
+or portability claim. [Attempt 8](../results/2026/11-04/ui-acceptance-attempt-8.md)
+recorded actual arm64 and reached the exact authored UI case. It failed at the
+ten-second existence assertion for the typed `plan.task.minutes.` Stepper after
+Create Plan: 1 test, 0 passed, 1 failed. The expected identifier is present in
+SwiftUI source, but the retained evidence does not show the actual accessibility
+element type or establish the failed query's cause. Both source guards and
+verified resource cleanup passed.
+
+This new diagnostic-only revision retains that exact typed query, one ten-second
+wait, assertion and every later action. Only if the wait fails, the test prints
+one fixed marker and a JSON projection of at most 16 actual elements whose
+identifier starts with `plan.` or whose label is exactly `New Plan`. Each record
+contains only numeric XCTest element type, identifier and label, with strings
+limited to 160 characters. Counts distinguish typed minutes Steppers from
+any-type matches for the same identifier prefix and the projection's matching
+elements. No values, entered text, raw debug description, global hierarchy or
+pixels are captured. Trailing records are omitted until the emitted JSON is at
+most 3,500 bytes; omitted counts remain explicit.
+
+Only on a failed UI command, the controller captures that fixed marker. It rejects
+duplicates/malformed schemas or fields, revalidates the identifier/title filter,
+sanitizes labels and identifiers, and limits the final diagnostic field to less
+than four KiB with original stream/line provenance. Diagnostics never supply an
+alternative query, action or acceptance result. No locator/product repair,
+timeout increase, fallback or retry is included. All app/core/project sources,
+architecture/flags, deadlines and identity/source/cleanup gates are unchanged.
+This diagnostic revision has not executed and provides no new UI pass.
 Root publishes this preparation and
 seal first, then pins separate activation. Both temporary UI and metadata-probe
 workflows must be absent from the pinned preparation commit.
@@ -98,7 +122,7 @@ intersection with `com.apple.CoreSimulator.SimDeviceType.iPhone-16`.
 It never downloads a runtime/SDK/package or substitutes a device/version.
 `DEVELOPER_DIR` selects the preinstalled toolchain without changing global settings.
 
-The [source seal](../results/2026/11-04/ui-acceptance-source-arm64.json) is
+The [source seal](../results/2026/11-04/ui-acceptance-source-stepper-diagnostic.json) is
 `conductor.ui-acceptance-source.v1`: complete `files` entries
 `{path,mode,gitBlob,bytes,sha256}`, `fileCount`, `totalBytes`,
 `excludedPrefixes:["docs/results/"]` and the exact scope recorded by the controller.

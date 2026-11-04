@@ -16,7 +16,7 @@ import tempfile
 import time
 import uuid
 
-SEAL = "docs/results/2026/11-04/ui-acceptance-source-arm64.json"
+SEAL = "docs/results/2026/11-04/ui-acceptance-source-stepper-diagnostic.json"
 WORKFLOW = ".github/workflows/ui-acceptance.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
@@ -172,6 +172,12 @@ class Acceptance:
                         row["destinationEvidence"] = evidence
                 except Exception:
                     row["destinationEvidence"] = {"diagnosticOnly": True, "status": "unavailable"}
+                try:
+                    evidence = self.stepper_diagnostic(out, err)
+                    if evidence is not None:
+                        row["stepperEvidence"] = evidence
+                except Exception:
+                    row["stepperEvidence"] = {"diagnosticOnly": True, "status": "unavailable"}
         row["reaped"] = p.poll() is not None
         self.commands.append(row)
         require(accept_failure or (code == 0 and reason is None), label + "_failed")
@@ -207,6 +213,53 @@ class Acceptance:
             evidence["omittedMatchingLines"] = total - len(matches)
         if len(json.dumps(evidence, separators=(",", ":")).encode()) > 3000:
             return {"diagnosticOnly": True, "status": "unavailable", "reason": "destination_evidence_bound"}
+        return evidence
+
+    def stepper_diagnostic(self, out, err):
+        marker = b"CONDUCTOR_UI_STEPPER_DIAGNOSTIC "
+        matches = [(name, number, line.split(marker, 1)[1])
+                   for name, data in (("stdout", out), ("stderr", err))
+                   for number, line in enumerate(data.splitlines(), 1) if marker in line]
+        if not matches:
+            return None
+        require(len(matches) == 1 and len(matches[0][2]) <= 4096, "stepper_diagnostic_marker_invalid")
+        def unique(pairs):
+            result = {}
+            for key, value in pairs:
+                require(key not in result, "stepper_diagnostic_duplicate_key")
+                result[key] = value
+            return result
+        stream, number, raw = matches[0]
+        value = json.loads(raw.decode("utf-8"), object_pairs_hook=unique)
+        require(isinstance(value, dict) and type(value.get("schemaVersion")) is int
+                and value["schemaVersion"] == 1, "stepper_diagnostic_schema_invalid")
+        if value == {"schemaVersion": 1, "status": "unavailable"}:
+            return {"diagnosticOnly": True, "status": "unavailable"}
+        counts = ("typedStepperCount", "identifierMatchedCount", "matchingElementCount", "omittedElements")
+        require(set(value) == {"schemaVersion", "elements", *counts}
+                and all(type(value[key]) is int and 0 <= value[key] <= 1000000 for key in counts),
+                "stepper_diagnostic_counts_invalid")
+        elements = value["elements"]
+        require(isinstance(elements, list) and len(elements) <= 16
+                and value["matchingElementCount"] - len(elements) == value["omittedElements"],
+                "stepper_diagnostic_elements_invalid")
+        cleaned = []
+        for element in elements:
+            require(isinstance(element, dict) and set(element) == {"type", "identifier", "label"}
+                    and type(element["type"]) is int and 0 <= element["type"] <= 1000
+                    and all(isinstance(element[key], str) and len(element[key]) <= 1024
+                            for key in ("identifier", "label"))
+                    and (element["identifier"].startswith("plan.") or element["label"] == "New Plan"),
+                    "stepper_diagnostic_element_invalid")
+            cleaned.append({"type": element["type"], **{key: self.clean(element[key].encode(), 640, head=True)[:160]
+                            for key in ("identifier", "label")}})
+        evidence = {"diagnosticOnly": True, "source": "ui-test." + stream, "sourceLine": number,
+                    "schemaVersion": 1, **{key: value[key] for key in counts}, "elements": cleaned}
+        while len(json.dumps(evidence, separators=(",", ":")).encode()) > 4000 and cleaned:
+            cleaned.pop()
+            evidence["omittedElements"] = value["matchingElementCount"] - len(cleaned)
+        require(len(json.dumps(evidence, separators=(",", ":")).encode()) <= 4000,
+                "stepper_diagnostic_bound")
         return evidence
 
     def json_command(self, label, args, cleanup=False, seconds=30):

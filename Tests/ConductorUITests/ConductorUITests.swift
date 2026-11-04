@@ -18,7 +18,9 @@ final class ConductorUITests: XCTestCase {
 
         tap(app.buttons["plans.create"])
         let minutes = app.steppers.matching(prefix: "plan.task.minutes.").firstMatch
-        XCTAssertTrue(minutes.waitForExistence(timeout: 10))
+        let minutesExist = minutes.waitForExistence(timeout: 10)
+        if !minutesExist { emitStepperDiagnostic(app) }
+        XCTAssertTrue(minutesExist)
         // New tasks start at five minutes; use the real Stepper to select two.
         for _ in 0..<3 { tap(minutes.buttons["Decrement"]) }
         enter(planTitle, into: app.textFields["plan.title"])
@@ -68,6 +70,38 @@ final class ConductorUITests: XCTestCase {
         XCTAssertFalse(app.buttons.matching(prefix: "run.resume.").firstMatch.exists)
         XCTAssertFalse(app.buttons.matching(prefix: "run.complete.").firstMatch.exists)
         screenshot("done-after-relaunch", app: app)
+    }
+
+    @MainActor
+    private func emitStepperDiagnostic(_ app: XCUIApplication) {
+        let identifiers = app.descendants(matching: .any).matching(prefix: "plan.task.minutes.")
+        let matching = app.descendants(matching: .any).matching(
+            NSPredicate(format: "identifier BEGINSWITH %@ OR label == %@", "plan.", "New Plan"))
+        let matchingCount = matching.count
+        var elements: [[String: Any]] = []
+        for index in 0..<min(matchingCount, 16) {
+            let element = matching.element(boundBy: index)
+            elements.append(["type": Int(element.elementType.rawValue),
+                             "identifier": String(element.identifier.prefix(160)),
+                             "label": String(element.label.prefix(160))])
+        }
+        var payload: [String: Any] = ["schemaVersion": 1,
+            "typedStepperCount": app.steppers.matching(prefix: "plan.task.minutes.").count,
+            "identifierMatchedCount": identifiers.count, "matchingElementCount": matchingCount,
+            "elements": elements, "omittedElements": matchingCount - elements.count]
+        while let data = try? JSONSerialization.data(withJSONObject: payload, options: [.sortedKeys]),
+              data.count > 3500, !elements.isEmpty {
+            elements.removeLast()
+            payload["elements"] = elements
+            payload["omittedElements"] = matchingCount - elements.count
+        }
+        let marker = "CONDUCTOR_UI_STEPPER_DIAGNOSTIC "
+        guard let data = try? JSONSerialization.data(withJSONObject: payload, options: [.sortedKeys]),
+              data.count <= 3500 else {
+            print(marker + "{\"schemaVersion\":1,\"status\":\"unavailable\"}")
+            return
+        }
+        print(marker + String(decoding: data, as: UTF8.self))
     }
 
     @MainActor
