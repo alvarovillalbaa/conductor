@@ -32,8 +32,9 @@ checks the actual installed versions and device support. Keep the existing
 timing, exact test verdict, source seal and owned-simulator cleanup gates.
 There is one execution, with no alternate locator or device fallback.
 
-The only controller changes select this toolchain, its new source seal and
-its task-owned CI branch. App, core, project and XCTest source stay at their
+The controller selects this toolchain, its new source seal and
+its task-owned CI branch. The startup change below uses Xcode's test action.
+App, core, project and XCTest source stay at their
 current bytes. The new seal includes all non-results source paths, including
 this proposal and the inactive workflow template. The active workflow lives
 in a separate activation commit and checks out the sealed source.
@@ -42,3 +43,21 @@ Standing all-work approval covers this necessary native verification. No
 notification permission, signing identity, store submission, provider call,
 account or paid enrollment is involved. Local Storage Guard prevents local
 native builds and simulator work, so execution uses the hosted runner.
+
+## Xcode-owned startup
+
+The [second profile](https://github.com/alvarovillalbaa/conductor/actions/runs/42990748224)
+verified the installed Xcode 27.0 tools and runtime/device intersection,
+created its simulator and issued a successful boot request. The subsequent
+manual boot-status command timed out after 120 seconds. The cleanup inventory
+also timed out, leaving explicit simulator deletion unverified. Scratch cleanup
+and all subprocess reaps passed. Its [original JSON](../results/2026/11-11/ui-acceptance-current-toolchain-2.json)
+is 7,299 bytes, SHA-256 `f1a33c396ce7fa35a20c38317758a9a641c095cb2ae70b7c1b729dfa3563de15`.
+
+The third preparation removes the separate manual boot and boot-status calls.
+Xcode's test action starts the specified destination as part of running tests.
+The controller still creates a fresh simulator, verifies its exact identity and
+Shutdown state, and passes only its UUID to the same test command. All test
+assertions, verdict checks, command bounds and metadata-based cleanup remain.
+This changes startup ownership and supplies no acceptance from the earlier
+failed jobs. [Apple test automation](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/testing_with_xcode/chapters/08-automation.html)

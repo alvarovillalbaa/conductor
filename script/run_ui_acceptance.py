@@ -16,7 +16,7 @@ import tempfile
 import time
 import uuid
 
-SEAL = "docs/results/2026/11-11/ui-acceptance-source-current-toolchain-2.json"
+SEAL = "docs/results/2026/11-11/ui-acceptance-source-current-toolchain-3.json"
 WORKFLOW = ".github/workflows/ui-acceptance-current-toolchain.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
@@ -49,7 +49,7 @@ class Acceptance:
     def __init__(self, commit):
         require(os.environ.get("GITHUB_ACTIONS") == "true" and os.environ.get("CI") == "true"
                 and os.environ.get("GITHUB_REPOSITORY") == "alvarovillalbaa/conductor"
-                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-current-toolchain-20261111-2",
+                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-current-toolchain-20261111-3",
                 "public_ci_scope_required")
         self.repo = Path.cwd().resolve()
         runner_tmpdir = os.environ["TMPDIR"]
@@ -380,9 +380,8 @@ class Acceptance:
         self.verify_ledgers()
         device = self.owned_device()
         require(device is not None and device["state"] == "Shutdown", "fresh_device_not_shutdown")
-        self.run("boot", ["xcrun", "simctl", "boot", self.simulator])
-        self.run("boot-status", ["xcrun", "simctl", "bootstatus", self.simulator, "-b"], seconds=120)
-        require(self.owned_device()["state"] == "Booted", "owned_device_not_booted")
+        self.report["simulatorStartup"] = {"owner": "xcodebuild test", "destination": self.simulator,
+                                           "initialState": device["state"]}
 
     def write_ledger(self, name, value):
         self.owner()

@@ -1,0 +1,395 @@
+{
+  "schemaVersion": "conductor.ui-acceptance-source.v1",
+  "baseCommit": "1d8e1823084ca23b7098a30b57edfa7b667be464",
+  "baseTree": "9022846fc3f7990d5482a5f34954ffce919ee8ca",
+  "state": "xcode-owned-startup-authored-not-run",
+  "excludedPrefixes": [
+    "docs/results/"
+  ],
+  "fileCount": 53,
+  "totalBytes": 220791,
+  "scope": {
+    "scheme": "ConductorUIAcceptance",
+    "testIdentifier": "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion",
+    "expectedCases": 1,
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "sdk": "27.0",
+    "architecture": "arm64",
+    "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-0",
+    "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
+  },
+  "files": [
+    {
+      "path": ".codex/environments/environment.toml",
+      "mode": "100644",
+      "gitBlob": "a6fad65dbf747a7b58d587f4e5b6e081b7551c64",
+      "bytes": 204,
+      "sha256": "2f899c87c43ba7bd2dcc94cb566951805b1cf3b37f41f854c5f063a3699ca8cf"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "gitBlob": "3eb6e4cb656a859af32871dda57cd5516d119a2a",
+      "bytes": 84,
+      "sha256": "a480d4327d9c339a87022c309c0706c033cab9e221c32454262a32d6a9689c65"
+    },
+    {
+      "path": "AGENTS.md",
+      "mode": "100644",
+      "gitBlob": "2362896bafae4e9246cfda5705e97a2ed5188c18",
+      "bytes": 1604,
+      "sha256": "da12f0ce9aa7af4b41e59777832e91e040d20b4162c4952226b307d6be4f0fca"
+    },
+    {
+      "path": "App/Conductor/App/ConductorApp.swift",
+      "mode": "100644",
+      "gitBlob": "9e3ce9be5eeeaae2274ed95f94dd3bfe8fd99c01",
+      "bytes": 194,
+      "sha256": "42e1e3a33e57685bf88b5e8eca28304ce9a8f9799819d8211b83f959ae956fb7"
+    },
+    {
+      "path": "App/Conductor/Models/AppPresentation.swift",
+      "mode": "100644",
+      "gitBlob": "932c993a4f5030ef84a6b89009faae3f9c3aa314",
+      "bytes": 1427,
+      "sha256": "70d9d1d5958aa70cccc6c1e4a92ce1cbe2cbb5cebd09621d71bea4651aa23de6"
+    },
+    {
+      "path": "App/Conductor/Services/DataExport.swift",
+      "mode": "100644",
+      "gitBlob": "d91e96629296bac44857a56bfe4788c83360691d",
+      "bytes": 2169,
+      "sha256": "b1fcc9bd3a099f218dd2683eff84f377678a134ee7ed1761d6e2228438fd6c65"
+    },
+    {
+      "path": "App/Conductor/Services/ReminderService.swift",
+      "mode": "100644",
+      "gitBlob": "f531c84ee961d4a69765ecf7be529937c1fd7aaa",
+      "bytes": 3975,
+      "sha256": "2b651918bfa79defdf34cff0f121eb2bb81da7d1cd730ffddc4f9ab193e79290"
+    },
+    {
+      "path": "App/Conductor/Services/WorkspaceFileStore.swift",
+      "mode": "100644",
+      "gitBlob": "4ed5e71fb87657c9275b7313657be267a6691f3a",
+      "bytes": 2640,
+      "sha256": "ea41b5ada4a75fe453831e85fd50c2f52e77ea0a168a4daf6ce6f2e4290a1d52"
+    },
+    {
+      "path": "App/Conductor/Stores/ConductorStore.swift",
+      "mode": "100644",
+      "gitBlob": "3e9cc241e4395adb7fe87f5555a81da7313c67b8",
+      "bytes": 8646,
+      "sha256": "b94a602303477493e4878e2f89fbd05eb2e43b380d7a79f90dc8760c3672843f"
+    },
+    {
+      "path": "App/Conductor/Support/TimeText.swift",
+      "mode": "100644",
+      "gitBlob": "d77550eb056c4102cc05a9f25a379d9c5b9a40af",
+      "bytes": 1377,
+      "sha256": "a7445390bc0d63a77394ba00a2f57e1ea07ffe7362022f5cd5d4d2fdf7b8648b"
+    },
+    {
+      "path": "App/Conductor/Views/AppRootView.swift",
+      "mode": "100644",
+      "gitBlob": "75293af3293d78b4bd05a4098f97b694abf0121a",
+      "bytes": 1114,
+      "sha256": "c8adeba83f44eeb4f3b8c15458bc147515460703003e07363545218812fe9db9"
+    },
+    {
+      "path": "App/Conductor/Views/DataExportButton.swift",
+      "mode": "100644",
+      "gitBlob": "a8ac9e3d3db84f1b79b3708111251b32aa3f9ab2",
+      "bytes": 1573,
+      "sha256": "b166f8e6d4f6f519f64a8dcd8e275afbd39ddb39e5939e0be74cfd4bf83273d0"
+    },
+    {
+      "path": "App/Conductor/Views/NoticeView.swift",
+      "mode": "100644",
+      "gitBlob": "1cfafdfb4a99cf8407f2513208f40f17b07b098e",
+      "bytes": 771,
+      "sha256": "f5f82c1743d8cfb22878c3b3b0f4caab41ec02a198c6359113f5cdd85dfa758c"
+    },
+    {
+      "path": "App/Conductor/Views/PlanDetailView.swift",
+      "mode": "100644",
+      "gitBlob": "a5cee3aadb6aaef27fb02dc0748661525b655f3b",
+      "bytes": 1752,
+      "sha256": "1ab8686477ef000c2c5c9101e56e034858a971e25d4be3024cf13feccffb03ec"
+    },
+    {
+      "path": "App/Conductor/Views/PlanEditorView.swift",
+      "mode": "100644",
+      "gitBlob": "3a8861db2743432e0e53293a694802a38284aba5",
+      "bytes": 5131,
+      "sha256": "56ec23dd61fc8f220b4ab511c51b229de41ac22909f3fb9c80d6c96763abcd3d"
+    },
+    {
+      "path": "App/Conductor/Views/PlansView.swift",
+      "mode": "100644",
+      "gitBlob": "0ec95fe35f37e6adc5a049f14b51775f9226a153",
+      "bytes": 3319,
+      "sha256": "5970981693960097231a155cb4ca3e09a0f227366f3407d229bd75dba8805916"
+    },
+    {
+      "path": "App/Conductor/Views/RunSetupView.swift",
+      "mode": "100644",
+      "gitBlob": "39828de44791b4420e3c5d0d64d3dae27fe2be4e",
+      "bytes": 4891,
+      "sha256": "ba419da80fab797728cff31b643084aadf25c887c542434798cb095ede78fb2c"
+    },
+    {
+      "path": "App/Conductor/Views/RunTaskRow.swift",
+      "mode": "100644",
+      "gitBlob": "44d59325c7becc28dc0738d4d2409b986c2fdf38",
+      "bytes": 4473,
+      "sha256": "055220140191898b8008f024fdf9d23bca013d56b53cc83f5d8829a101a646b8"
+    },
+    {
+      "path": "App/Conductor/Views/RunView.swift",
+      "mode": "100644",
+      "gitBlob": "b9f104e3e97da5a028413c732fe85518dccf1620",
+      "bytes": 3569,
+      "sha256": "d69f3695e18bcb39e39bd98edfc97768f3b35b8bf2c3b568d474820f4cf7f47f"
+    },
+    {
+      "path": "App/Conductor/Views/SettingsView.swift",
+      "mode": "100644",
+      "gitBlob": "43b5c71cc789fa93467fa492d2591189304ef28d",
+      "bytes": 3632,
+      "sha256": "c621b55b4edaa7db06cfc0a228324a27e6e801c870c984131e5a34f97f524cc3"
+    },
+    {
+      "path": "Conductor.xcodeproj/project.pbxproj",
+      "mode": "100644",
+      "gitBlob": "a9b40ede9d3e3d933525afb90929bd655bcc93f0",
+      "bytes": 17669,
+      "sha256": "7fe5a25cadb7c6941828c5b46a0ff2f5ca1ac0d4ebad2cc512f1d52a6fba02f7"
+    },
+    {
+      "path": "Conductor.xcodeproj/xcshareddata/xcschemes/Conductor.xcscheme",
+      "mode": "100644",
+      "gitBlob": "e6d6588be18c21217c80e1ac4e12cf0209cc5c31",
+      "bytes": 2029,
+      "sha256": "9ab9f4e453c22f5b0e1bb970252aefe9836d497a9cd765e2bb643bcf8ebcca10"
+    },
+    {
+      "path": "Conductor.xcodeproj/xcshareddata/xcschemes/ConductorUIAcceptance.xcscheme",
+      "mode": "100644",
+      "gitBlob": "0d71f702034e412c6b68f8303f3c6f44ff777d52",
+      "bytes": 1588,
+      "sha256": "75cfaf4e8ab22e0aa6f66ed14c8c57831cbe97fb69b40298acb6d6f1af4653bb"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "gitBlob": "5fb52b674e5a4d756d26a8fc3619651bb3b28798",
+      "bytes": 1072,
+      "sha256": "7edafcd8ebca4ecabedfad6e3c3d4872ce0ef6b49c3658a8b6e644cfb884d32d"
+    },
+    {
+      "path": "Package.swift",
+      "mode": "100644",
+      "gitBlob": "7528c0b68b3b8604ca8fbfbea6b790b85a94b52e",
+      "bytes": 366,
+      "sha256": "6704d2410222bd733119bda87895710053d08589bf39f45946cee1e76e40511d"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "gitBlob": "f3085bcfec3741b2a0db65fdb8a919c9b32b3b44",
+      "bytes": 5304,
+      "sha256": "76b6c1e0e55f879e7f0b581bf80d04d4d1ba64af24a5bfdc949533e33d0557e9"
+    },
+    {
+      "path": "Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
+      "mode": "100644",
+      "gitBlob": "20f8dd18e4cf75a0fe00efe56e60b3817dd7b6f7",
+      "bytes": 9324,
+      "sha256": "c915d642320ea96aaf98f895d7c8e526db32e570657c68aec32376c7decbaac4"
+    },
+    {
+      "path": "Resources/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "mode": "100644",
+      "gitBlob": "7140563583a209df2e1515c4177e85428b7417f2",
+      "bytes": 203,
+      "sha256": "852920cb36e95beb53771138a4b8195a16fcce1cc31250632f246081cc638f9a"
+    },
+    {
+      "path": "Resources/Assets.xcassets/Contents.json",
+      "mode": "100644",
+      "gitBlob": "74d6a722cf39b2dd5bef11f166e6ac9b99568a01",
+      "bytes": 60,
+      "sha256": "f5fb0e1f3a8142892ed092efb5955c1c2cc537003a89ad7bbdb9dade7fe8985f"
+    },
+    {
+      "path": "Resources/Info.plist",
+      "mode": "100644",
+      "gitBlob": "5a652a7b9029e7de2cb518f625f0f7f622dc0a34",
+      "bytes": 1424,
+      "sha256": "d9b7b4555b493864ea1f08e6ea8e68952fd962b77dbe02add05aca3959eceb42"
+    },
+    {
+      "path": "Resources/PrivacyInfo.xcprivacy",
+      "mode": "100644",
+      "gitBlob": "dee5067fe1947e2ac32064d1c7ebae76b8426c03",
+      "bytes": 377,
+      "sha256": "418018c160ded561d379cee1510cfb6e0806573c7221177a5330d76ea4145990"
+    },
+    {
+      "path": "Sources/ConductorCore/JSONKeyUniqueness.swift",
+      "mode": "100644",
+      "gitBlob": "a5a1b2564365fc3b6ab50a03c9a23de15b4edd65",
+      "bytes": 2611,
+      "sha256": "fd6575bfc4cc1f3d8d7aaf9a1fe5394704a87ea88a5d9cb40f8c11c1243a32de"
+    },
+    {
+      "path": "Sources/ConductorCore/Models.swift",
+      "mode": "100644",
+      "gitBlob": "15bf01ce3eb342445b0a1a377f56d2827d3a1181",
+      "bytes": 4509,
+      "sha256": "653879419fc95f4761b3519784edb74fcd8883bf87b219341c43e2d0bdb1cded"
+    },
+    {
+      "path": "Sources/ConductorCore/ReminderPlanning.swift",
+      "mode": "100644",
+      "gitBlob": "3cec5553d885b58f8095566a65ee6579662b63ed",
+      "bytes": 1535,
+      "sha256": "57da712c52ffbef19c60e621a52ebd1e84e5ae07b197911e1ff3aeef8027ec1f"
+    },
+    {
+      "path": "Sources/ConductorCore/ScheduleEngine.swift",
+      "mode": "100644",
+      "gitBlob": "3494e9d4bfd70dcb873697b5a347f0b00161e1b5",
+      "bytes": 5688,
+      "sha256": "a1faab623ae41d5f7334251d5b4fb2f50f8d99282e5068207e4e9f983c26f5d6"
+    },
+    {
+      "path": "Sources/ConductorCore/Validation.swift",
+      "mode": "100644",
+      "gitBlob": "ffcffd3279fa28797e654658dff11934e9dbb2f0",
+      "bytes": 4842,
+      "sha256": "c414be3d3f826a269c2bbac2dbed750b0ad4eda6e235c5724ce0abf1dcc98288"
+    },
+    {
+      "path": "Sources/ConductorCore/WorkspaceCodec.swift",
+      "mode": "100644",
+      "gitBlob": "976fdb62c2c2670cc7eed2c0087f9b6d6d909735",
+      "bytes": 4596,
+      "sha256": "16538b101bf8913d03b904b52bc43955c632709ee5a2849bf94d4c372d40d1b2"
+    },
+    {
+      "path": "Tests/ConductorCoreTests/ConductorCoreTests.swift",
+      "mode": "100644",
+      "gitBlob": "00588a22b8e44d3c1f9df9a998496c93ef9f4aec",
+      "bytes": 25078,
+      "sha256": "a78066d1c5564317412b90c1ba05970071ccad38229dc75d4aebe8322f627cda"
+    },
+    {
+      "path": "Tests/ConductorUITests/ConductorUITests.swift",
+      "mode": "100644",
+      "gitBlob": "708314484e5e3aff4a9e1a69a99ec48a49d35217",
+      "bytes": 6769,
+      "sha256": "97a7ef170095cb153223bf2248314777ffc2fedf8be008d5715e167b33468ee2"
+    },
+    {
+      "path": "artwork/app-icon.svg",
+      "mode": "100644",
+      "gitBlob": "94a086aec521b66764ccc86458730aaffd1fa681",
+      "bytes": 581,
+      "sha256": "8e27b5172afc39658aabb81c4ef5fb44abf503e34a034d91dc0d65394e574921"
+    },
+    {
+      "path": "docs/architecture.md",
+      "mode": "100644",
+      "gitBlob": "0d8ffdaf55519cd1a7da4e4f665d330756b8bbee",
+      "bytes": 2198,
+      "sha256": "264d54ae108e88c5ba38facf6f28ee84f0cf3766f58a344a7a921af0aaea2542"
+    },
+    {
+      "path": "docs/proposals/app-icon-build-ci.yml.example",
+      "mode": "100644",
+      "gitBlob": "b65da39baaba2f64056d34f41f423baba8d78a11",
+      "bytes": 1093,
+      "sha256": "9a57cf76cbd36ce0135c994532829e8b5a440ad52718611ef225e6f05adaaff5"
+    },
+    {
+      "path": "docs/proposals/app-icon-build.md",
+      "mode": "100644",
+      "gitBlob": "2baf351d11c40fbc4f79beb95fdc144cde03d5c3",
+      "bytes": 1749,
+      "sha256": "1536ba0d8f97742fe8f43059db58cd44ca5685d36417b3955872e3c9068e35ad"
+    },
+    {
+      "path": "docs/proposals/native-checks-ci.yml.example",
+      "mode": "100644",
+      "gitBlob": "50f4919bd4b836281efb9588026ab408b2ded580",
+      "bytes": 1129,
+      "sha256": "1a5fe1eea5afb25a904ee0162c6dc632c9c622d5fa1f61c987d6a1b9f060e6d0"
+    },
+    {
+      "path": "docs/proposals/native-checks.md",
+      "mode": "100644",
+      "gitBlob": "9f9e05cc0b685d4130b46d5c44ad35c1874be98e",
+      "bytes": 2269,
+      "sha256": "f236deca92d69364fc422e2d522dd73e2cfa575305bd496e786ad0fcf517d0f0"
+    },
+    {
+      "path": "docs/proposals/ui-acceptance.md",
+      "mode": "100644",
+      "gitBlob": "4aad9b449d05bf5630126ff6463982ba6936b9c4",
+      "bytes": 13621,
+      "sha256": "060731d61b999d76c64846815324d46a68d54b30dedffb750a0e17fafe8ac0f0"
+    },
+    {
+      "path": "docs/proposals/ui-current-toolchain.md",
+      "mode": "100644",
+      "gitBlob": "43a567a86f6411c02ea8db80ee8283671223454c",
+      "bytes": 4431,
+      "sha256": "e4162422e1f9e19d36db7a322ff49c920704111a4aac90d07d730b112de1d606"
+    },
+    {
+      "path": "docs/proposals/ui-current-toolchain.workflow.yml.example",
+      "mode": "100644",
+      "gitBlob": "9a3c13bb16aa9109638d0c2e4f80b645aad694dd",
+      "bytes": 1329,
+      "sha256": "84b421eaa9dac4291715d80d631a16f39b11860313fa4cc72da31932a1d1db8b"
+    },
+    {
+      "path": "docs/specs/core-contract.md",
+      "mode": "100644",
+      "gitBlob": "54f784eb44c6465b611c0f860bf7823f051c4dcc",
+      "bytes": 6042,
+      "sha256": "112faff0fbb603666231652d1c44e7f413673d7025a292ddbc11011ef5fc6467"
+    },
+    {
+      "path": "docs/specs/product.md",
+      "mode": "100644",
+      "gitBlob": "a5052bf4bfb77146fb7f98855e0f751c00c0d864",
+      "bytes": 2422,
+      "sha256": "1b444a3b429bc9acf9db737696765e5ba0a37da18708aeb9d1210044ae984042"
+    },
+    {
+      "path": "script/check_native.sh",
+      "mode": "100755",
+      "gitBlob": "a5d3e3e17bebd04fed59455e7487fc84e47e9624",
+      "bytes": 1129,
+      "sha256": "da289009ffd0eb05c983d7291c88b5d982d1215253e2d9cfe861ff33383a9f77"
+    },
+    {
+      "path": "script/render_app_icon.py",
+      "mode": "100644",
+      "gitBlob": "bda61c18455f716c7a7c05a1c87cbf32fa7f5ad9",
+      "bytes": 4645,
+      "sha256": "09b67363dc1c8b801af4e900eaac24bf1cf8b6b133052928b988102bb9a9d194"
+    },
+    {
+      "path": "script/run_ui_acceptance.py",
+      "mode": "100644",
+      "gitBlob": "bb1db8367895a1ee700d77b9ad5489ba42072bab",
+      "bytes": 30564,
+      "sha256": "cfd8bd9d6ee347e1d6b9becbb0161748d5ce8a568e0b65d61d2bbac1815410b7"
+    }
+  ]
+}
