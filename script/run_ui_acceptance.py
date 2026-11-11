@@ -16,14 +16,14 @@ import tempfile
 import time
 import uuid
 
-SEAL = "docs/results/2026/11-04/ui-acceptance-source-stepper-diagnostic.json"
-WORKFLOW = ".github/workflows/ui-acceptance.yml"
+SEAL = "docs/results/2026/11-11/ui-acceptance-source-current-toolchain.json"
+WORKFLOW = ".github/workflows/ui-acceptance-current-toolchain.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
-         "xcodeVersion": "16.4", "xcodeBuild": "16F6", "sdk": "18.5",
+         "xcodeVersion": "26.2", "xcodeBuild": "17C52", "sdk": "26.2",
          "architecture": "arm64",
-         "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
-         "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-16"}
+         "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-26-2",
+         "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-17"}
 ATTACHMENTS = {"paused-after-relaunch", "done-after-relaunch"}
 
 
@@ -49,7 +49,8 @@ class Acceptance:
     def __init__(self, commit):
         require(os.environ.get("GITHUB_ACTIONS") == "true" and os.environ.get("CI") == "true"
                 and os.environ.get("GITHUB_REPOSITORY") == "alvarovillalbaa/conductor"
-                and os.environ.get("GITHUB_REF") == "refs/heads/main", "public_ci_scope_required")
+                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-current-toolchain-20261111-1",
+                "public_ci_scope_required")
         self.repo = Path.cwd().resolve()
         runner_tmpdir = os.environ["TMPDIR"]
         require(os.path.isabs(runner_tmpdir) and Path(runner_tmpdir).is_dir(), "runner_tmpdir_invalid")
@@ -62,7 +63,7 @@ class Acceptance:
         self.deadline, self.cleanup_deadline = time.monotonic() + 900, None
         self.env = {"PATH": "/usr/bin:/bin:/usr/sbin:/sbin", "HOME": os.environ["HOME"],
                     "TMPDIR": runner_tmpdir, "LANG": "en_US.UTF-8",
-                    "DEVELOPER_DIR": "/Applications/Xcode_16.4.app/Contents/Developer"}
+                    "DEVELOPER_DIR": "/Applications/Xcode_26.2.app/Contents/Developer"}
         self.commands, self.simulator, self.planned, self.seal_hash = [], None, None, None
         self.create_attempted = False
         self.report = {"schemaVersion": "conductor.ui-acceptance.v1", "sourceCommit": commit,
@@ -354,18 +355,18 @@ class Acceptance:
         require(architecture == SCOPE["architecture"], "runner_architecture_unavailable")
         self.guard("beforeSourceGuard")
         version = self.run("xcode", ["xcodebuild", "-version"])[0].decode().strip()
-        require(version == "Xcode 16.4\nBuild version 16F6", "xcode_pin_unavailable")
+        require(version == "Xcode 26.2\nBuild version 17C52", "xcode_pin_unavailable")
         sdk = self.run("sdk", ["xcrun", "--sdk", "iphonesimulator", "--show-sdk-version"])[0].decode().strip()
-        require(sdk == "18.5", "sdk_pin_unavailable")
+        require(sdk == "26.2", "sdk_pin_unavailable")
         runtimes, _ = self.json_command("runtimes", ["xcrun", "simctl", "list", "runtimes", "-j"], seconds=90)
         selected = [r for r in runtimes.get("runtimes", []) if r.get("identifier") == SCOPE["runtime"]]
         require(len(selected) == 1 and selected[0].get("isAvailable") is True
-                and selected[0].get("version") == "18.5", "runtime_pin_unavailable")
+                and selected[0].get("version") == "26.2", "runtime_pin_unavailable")
         supported = selected[0].get("supportedDeviceTypes")
         require(isinstance(supported, list) and any(r.get("identifier") == SCOPE["deviceType"] for r in supported),
                 "runtime_device_intersection_unavailable")
         types, _ = self.json_command("device-types", ["xcrun", "simctl", "list", "devicetypes", "-j"])
-        require(any(r.get("identifier") == SCOPE["deviceType"] and r.get("name") == "iPhone 16"
+        require(any(r.get("identifier") == SCOPE["deviceType"] and r.get("name") == "iPhone 17"
                     for r in types.get("devicetypes", [])), "device_type_unavailable")
         self.report["toolchain"].update({"xcode": version, "sdk": sdk, "runtime": SCOPE["runtime"], "deviceType": SCOPE["deviceType"]})
         self.planned = {"name": "conductor-ui-" + self.nonce, "runtime": SCOPE["runtime"], "deviceType": SCOPE["deviceType"]}
