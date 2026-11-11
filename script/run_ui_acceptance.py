@@ -15,15 +15,17 @@ import sys
 import tempfile
 import time
 import uuid
+import xml.etree.ElementTree as ET
 
-SEAL = "docs/results/2026/11-11/ui-acceptance-source-current-toolchain-6.json"
+SEAL = "docs/results/2026/11-11/ui-acceptance-source-current-toolchain-7.json"
 WORKFLOW = ".github/workflows/ui-acceptance-current-toolchain.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
          "xcodeVersion": "27.2", "xcodeBuild": "27B52", "sdk": "27.2",
          "architecture": "arm64",
          "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-2",
-         "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-17"}
+         "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-17",
+         "storageTestFilter": "ConductorFileStoreTests.WorkspaceFileStoreTests", "expectedStorageCases": 7}
 ATTACHMENTS = {"paused-after-relaunch", "done-after-relaunch"}
 
 
@@ -49,7 +51,7 @@ class Acceptance:
     def __init__(self, commit):
         require(os.environ.get("GITHUB_ACTIONS") == "true" and os.environ.get("CI") == "true"
                 and os.environ.get("GITHUB_REPOSITORY") == "alvarovillalbaa/conductor"
-                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-current-toolchain-20261111-6",
+                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-current-toolchain-20261111-7",
                 "public_ci_scope_required")
         self.repo = Path.cwd().resolve()
         runner_tmpdir = os.environ["TMPDIR"]
@@ -374,6 +376,7 @@ class Acceptance:
         require(any(r.get("identifier") == SCOPE["deviceType"] and r.get("name") == "iPhone 17"
                     for r in types.get("devicetypes", [])), "device_type_unavailable")
         self.report["toolchain"].update({"xcode": version, "sdk": sdk, "runtime": SCOPE["runtime"], "deviceType": SCOPE["deviceType"]})
+        self.storage_tests()
         self.planned = {"name": "conductor-ui-" + self.nonce, "runtime": SCOPE["runtime"], "deviceType": SCOPE["deviceType"]}
         require(not any(r.get("name") == self.planned["name"] for _, r in self.devices()), "device_name_already_exists")
         self.write_ledger("planned-device.json", self.planned)
@@ -404,6 +407,47 @@ class Acceptance:
                 p = self.root / name
                 require(p.is_file() and not p.is_symlink() and p.stat().st_size < 4096
                         and json.loads(p.read_text()) == value, "device_ledger_changed")
+
+    def storage_tests(self):
+        help_bytes, _ = self.run("storage-test-help", ["swift", "test", "--help"])
+        require(all(flag in help_bytes for flag in (b"--xunit-output", b"--filter", b"--scratch-path")),
+                "storage_test_flags_unavailable")
+        fixtures = self.root / "storage-fixtures"
+        fixtures.mkdir()
+        self.env["CONDUCTOR_STORAGE_TEST_ROOT"] = str(fixtures)
+        result = self.root / "storage-tests.xml"
+        _, outcome = self.run("storage-tests", ["swift", "test", "--package-path", str(self.repo),
+            "--scratch-path", str(self.root / "StorageBuild"), "--cache-path", str(self.root / "package-cache"),
+            "--config-path", str(self.root / "package-config"), "--security-path", str(self.root / "package-security"),
+            "--manifest-cache", "local", "--skip-update", "--disable-index-store",
+            "--enable-xctest", "--disable-swift-testing",
+            "--filter", SCOPE["storageTestFilter"], "--xunit-output", str(result)],
+            seconds=180, cap=1024 * 1024, accept_failure=True)
+        require(result.is_file() and not result.is_symlink() and result.stat().st_size <= 65536,
+                "storage_xunit_unavailable")
+        raw = result.read_bytes()
+        root = ET.fromstring(raw)
+        cases = root.findall(".//testcase")
+        names = [case.get("name") for case in cases]
+        run_id = os.environ["GITHUB_RUN_ID"]
+        require(re.fullmatch(r"[0-9]+", run_id) is not None, "artifact_run_id")
+        name = "conductor-storage-" + run_id + ".xml"
+        with (self.parent / name).open("xb") as handle:
+            handle.write(raw)
+        self.report["storageTests"] = {"status": "failed", "cases": names,
+            "xunit": {"file": name, "bytes": len(raw), "sha256": sha(raw)}}
+        expected = {"testMissingParentLoadsEmptyWithoutWriting", "testMissingFileLoadsEmptyWithoutWriting",
+            "testSavedWorkspaceReloadsWithoutChangingBytes", "testMalformedFileRemainsRecoverable",
+            "testOversizedFileRemainsRecoverable", "testDirectoryAtFilePathIsNotTreatedAsNewWorkspace",
+            "testUnavailableDirectoryFails"}
+        require(len(cases) == SCOPE["expectedStorageCases"] and set(names) == expected
+                and all(case.get("classname", "").split(".")[-1] == "WorkspaceFileStoreTests" for case in cases),
+                "storage_case_identity_or_count")
+        require(not root.findall(".//failure") and not root.findall(".//error") and not root.findall(".//skipped")
+                and all(suite.get(key, "0") == "0" for suite in root.iter("testsuite")
+                        for key in ("failures", "errors", "skipped")), "storage_cases_not_passed")
+        require(outcome["exitCode"] == 0 and outcome["stop"] is None, "storage_test_exit_failed")
+        self.report["storageTests"]["status"] = "passed"
 
     def test(self):
         result = self.root / "ui.xcresult"

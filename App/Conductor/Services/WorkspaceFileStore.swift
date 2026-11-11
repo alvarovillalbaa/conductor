@@ -30,11 +30,17 @@ struct WorkspaceFileStore {
             .appendingPathComponent("workspace.json")
     }
 
+    init(fileURL: URL?) {
+        self.fileURL = fileURL
+    }
+
     func load() throws -> Workspace {
         guard let fileURL else { throw LocalDataError.unavailableDirectory }
         let handle: FileHandle
         do { handle = try FileHandle(forReadingFrom: fileURL) }
-        catch let error as CocoaError where error.code == .fileReadNoSuchFile { return Workspace() }
+        catch let error as CocoaError where error.code == .fileNoSuchFile || error.code == .fileReadNoSuchFile {
+            return Workspace()
+        }
         defer { try? handle.close() }
         var data = Data()
         while data.count <= WorkspaceCodec.maximumBytes {

@@ -111,6 +111,7 @@ final class ConductorUITests: XCTestCase {
     @MainActor
     private func tap(_ element: XCUIElement, file: StaticString = #filePath, line: UInt = #line) {
         XCTAssertTrue(element.waitForExistence(timeout: 10), file: file, line: line)
+        XCTAssertTrue(element.isEnabled, file: file, line: line)
         XCTAssertTrue(element.isHittable, file: file, line: line)
         element.tap()
     }

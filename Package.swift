@@ -7,6 +7,10 @@ let package = Package(
     products: [.library(name: "ConductorCore", targets: ["ConductorCore"])],
     targets: [
         .target(name: "ConductorCore"),
+        .target(name: "ConductorFileStore", dependencies: ["ConductorCore"],
+                path: "App/Conductor/Services", exclude: ["DataExport.swift", "ReminderService.swift"],
+                sources: ["WorkspaceFileStore.swift"]),
         .testTarget(name: "ConductorCoreTests", dependencies: ["ConductorCore"]),
+        .testTarget(name: "ConductorFileStoreTests", dependencies: ["ConductorFileStore", "ConductorCore"]),
     ]
 )

@@ -120,3 +120,31 @@ with the original exact-case, counts, empty-failures and zero-exit gates.
 Bounded image export now runs after either outcome, so a passing case can retain
 its existing paused/done captures for actual visual inspection in the same job.
 The new report field is `imageAttachments`; image retention is diagnostic only.
+
+## Fresh-install file recovery repair
+
+The [sixth run](https://github.com/alvarovillalbaa/conductor/actions/runs/42997968450)
+reached the original minutes assertion and retained its [actual screenshot](../results/2026/11-11/fresh-install-recovery.png).
+The 1206×2622 PNG is 245,580 bytes, SHA-256 `f91b53c645bf553da83a1afa178fe55e4815532dc2f0f29f48a27b3aa0e60bf0`;
+it was downloaded, hash-checked and viewed. The screen shows recovery for a
+missing `workspace.json` and a disabled Create a Plan button. The diagnostic's
+New Plan element is the root toolbar button, confirmed by the XCTest activity
+log, rather than evidence that the editor opened. Both guards, all reaps and
+owned cleanup passed. The [20,683-byte original report](../results/2026/11-11/ui-acceptance-current-toolchain-6.json)
+has SHA-256 `7143f22073d216f9d1568f62615f4b427374b6211c6ceee8286751f5fc235292`.
+
+The seventh source repairs `WorkspaceFileStore.load()` to accept Foundation's
+general missing-file Cocoa error in addition to its read-specific missing-file
+error. It still propagates every other open/read/decode failure and writes
+nothing when loading an absent file. The local SDK header declares these as
+distinct codes 4 and 260. An internal URL initializer permits isolated fixtures
+without changing the app's normal Application Support location.
+
+A Foundation-only SwiftPM test target compiles the same app file. Seven authored
+cases cover missing file/missing parent without writes, save/reload byte retention,
+malformed and oversized originals, a directory in place of the file, and an
+unavailable data location. They run on the macOS runner before simulator creation,
+under owned scratch, with a retained xUnit XML and exact-case/exit/failure gates.
+The existing forty core cases are not selected. The original iOS UI journey then
+runs once, with an added enabled-state assertion before taps. All earlier action
+and completion assertions, time limits and source/cleanup guards remain.
