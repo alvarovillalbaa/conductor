@@ -16,7 +16,7 @@ import tempfile
 import time
 import uuid
 
-SEAL = "docs/results/2026/11-11/ui-acceptance-source-current-toolchain-3.json"
+SEAL = "docs/results/2026/11-11/ui-acceptance-source-current-toolchain-4.json"
 WORKFLOW = ".github/workflows/ui-acceptance-current-toolchain.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
@@ -49,7 +49,7 @@ class Acceptance:
     def __init__(self, commit):
         require(os.environ.get("GITHUB_ACTIONS") == "true" and os.environ.get("CI") == "true"
                 and os.environ.get("GITHUB_REPOSITORY") == "alvarovillalbaa/conductor"
-                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-current-toolchain-20261111-3",
+                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-current-toolchain-20261111-4",
                 "public_ci_scope_required")
         self.repo = Path.cwd().resolve()
         runner_tmpdir = os.environ["TMPDIR"]
@@ -250,7 +250,9 @@ class Acceptance:
                     and type(element["type"]) is int and 0 <= element["type"] <= 1000
                     and all(isinstance(element[key], str) and len(element[key]) <= 1024
                             for key in ("identifier", "label"))
-                    and (element["identifier"].startswith("plan.") or element["label"] == "New Plan"),
+                    and (element["identifier"].startswith("plan.") or element["label"] in {
+                        "New Plan", "Plan", "Task name", "Task minutes", "Minutes: 5", "Hours: 0",
+                        "Seconds: 0", "Add Task", "Save", "Cancel", "Name, such as Dinner together"}),
                     "stepper_diagnostic_element_invalid")
             cleaned.append({"type": element["type"], **{key: self.clean(element[key].encode(), 640, head=True)[:160]
                             for key in ("identifier", "label")}})
@@ -429,6 +431,11 @@ class Acceptance:
             nodes.extend((child, parents + [node.get("name")]) for child in node.get("children", []))
         self.report["xcresult"]["cases"] = [{"name": n.get("name"), "parents": p, "status": n.get("result"),
                                             "identifier": n.get("nodeIdentifier")} for n, p in cases]
+        if outcome["exitCode"] != 0:
+            try:
+                self.failure_images(result)
+            except Exception as error:
+                self.report["failureImages"] = {"status": "unavailable", "reason": type(error).__name__}
         require(len(cases) == 1, "xcresult_case_count")
         node, parents = cases[0]
         require(node.get("name") == CASE.split("/")[-1] + "()"
@@ -454,6 +461,31 @@ class Acceptance:
             self.report["screenshots"].update({"activitiesSha256": sha(raw), "metadata": found[:2], "matchingRecords": len(found)})
         except (Refused, ValueError, KeyError, TypeError):
             self.report["screenshots"]["metadataStatus"] = "unavailable"
+
+    def failure_images(self, result):
+        help_bytes, _ = self.run("failure-export-help", ["xcrun", "xcresulttool", "export", "attachments", "--help"])
+        require(all(flag in help_bytes for flag in (b"--path", b"--output-path", b"--only-failures")), "attachment_export_flags")
+        destination = self.root / "failure-attachments"
+        self.run("failure-export", ["xcrun", "xcresulttool", "export", "attachments", "--path", str(result),
+                                   "--output-path", str(destination), "--only-failures"], seconds=60, cap=1024 * 1024)
+        files = sorted(destination.rglob("*"))
+        require(len(files) <= 256 and all(not path.is_symlink() for path in files), "attachment_export_inventory")
+        images = [path for path in files if path.is_file() and path.suffix.lower() == ".png"]
+        require(images and len(images) <= 32, "attachment_image_count")
+        output = self.parent / ("conductor-ui-images-" + os.environ["GITHUB_RUN_ID"])
+        require(re.fullmatch(r"[0-9]+", os.environ["GITHUB_RUN_ID"]) is not None, "artifact_run_id")
+        output.mkdir(mode=0o700)
+        retained = []
+        for index, path in enumerate(images[:8]):
+            require(path.stat().st_size <= 4 * 1024 * 1024, "attachment_image_bound")
+            data = path.read_bytes()
+            require(data.startswith(b"\x89PNG\r\n\x1a\n"), "attachment_image_type")
+            name = "editor-failure-" + str(index + 1) + ".png"
+            with (output / name).open("xb") as handle:
+                handle.write(data)
+            retained.append({"file": name, "bytes": len(data), "sha256": sha(data)})
+        self.report["failureImages"] = {"status": "retained", "images": retained,
+                                       "omittedImages": max(0, len(images) - 8)}
 
     def cleanup(self):
         if self.cleanup_deadline is None:

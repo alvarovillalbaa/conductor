@@ -61,3 +61,22 @@ Shutdown state, and passes only its UUID to the same test command. All test
 assertions, verdict checks, command bounds and metadata-based cleanup remain.
 This changes startup ownership and supplies no acceptance from the earlier
 failed jobs. [Apple test automation](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/testing_with_xcode/chapters/08-automation.html)
+
+## Failed editor evidence
+
+The [third run](https://github.com/alvarovillalbaa/conductor/actions/runs/42992082373)
+executed the actual case and failed at the Stepper lookup. The failure-only
+projection found the New Plan navigation bar and no matching plan identifier.
+Both source guards and owned simulator/scratch cleanup passed. Its
+[original JSON](../results/2026/11-11/ui-acceptance-current-toolchain-3.json)
+is 12,006 bytes with SHA-256 `4aaaee09587128dd57348621be071039e0fcce68ce1cde5d183ec183ad486ee7`.
+
+The fourth source retains every assertion and action, adds a failure screenshot,
+and admits a fixed list of editor labels into the bounded diagnostic. After an
+actual failed test, the controller verifies the installed attachment-export help
+and exports failure attachments into its owned scratch. It retains at most eight
+PNG images, each at most four MiB, in the job artifact before removing scratch.
+The simulator contains only the authored test. No user account or existing data
+is present. The diagnostic is intended to determine whether the form is rendered
+and how its controls appear to accessibility. It does not qualify a failed case
+as accepted.

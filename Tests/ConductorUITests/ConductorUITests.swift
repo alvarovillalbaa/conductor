@@ -74,9 +74,13 @@ final class ConductorUITests: XCTestCase {
 
     @MainActor
     private func emitStepperDiagnostic(_ app: XCUIApplication) {
+        screenshot("plan-editor-failure", app: app)
         let identifiers = app.descendants(matching: .any).matching(prefix: "plan.task.minutes.")
+        let labels = ["New Plan", "Plan", "Task name", "Task minutes", "Minutes: 5",
+                      "Hours: 0", "Seconds: 0", "Add Task", "Save", "Cancel",
+                      "Name, such as Dinner together"]
         let matching = app.descendants(matching: .any).matching(
-            NSPredicate(format: "identifier BEGINSWITH %@ OR label == %@", "plan.", "New Plan"))
+            NSPredicate(format: "identifier BEGINSWITH %@ OR label IN %@", argumentArray: ["plan.", labels]))
         let matchingCount = matching.count
         var elements: [[String: Any]] = []
         for index in 0..<min(matchingCount, 16) {
