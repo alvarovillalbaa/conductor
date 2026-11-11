@@ -16,13 +16,13 @@ import tempfile
 import time
 import uuid
 
-SEAL = "docs/results/2026/11-11/ui-acceptance-source-current-toolchain.json"
+SEAL = "docs/results/2026/11-11/ui-acceptance-source-current-toolchain-2.json"
 WORKFLOW = ".github/workflows/ui-acceptance-current-toolchain.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
-         "xcodeVersion": "26.2", "xcodeBuild": "17C52", "sdk": "26.2",
+         "xcodeVersion": "27.0", "xcodeBuild": "27A266a", "sdk": "27.0",
          "architecture": "arm64",
-         "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-26-2",
+         "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-0",
          "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-17"}
 ATTACHMENTS = {"paused-after-relaunch", "done-after-relaunch"}
 
@@ -49,7 +49,7 @@ class Acceptance:
     def __init__(self, commit):
         require(os.environ.get("GITHUB_ACTIONS") == "true" and os.environ.get("CI") == "true"
                 and os.environ.get("GITHUB_REPOSITORY") == "alvarovillalbaa/conductor"
-                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-current-toolchain-20261111-1",
+                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-current-toolchain-20261111-2",
                 "public_ci_scope_required")
         self.repo = Path.cwd().resolve()
         runner_tmpdir = os.environ["TMPDIR"]
@@ -63,7 +63,7 @@ class Acceptance:
         self.deadline, self.cleanup_deadline = time.monotonic() + 900, None
         self.env = {"PATH": "/usr/bin:/bin:/usr/sbin:/sbin", "HOME": os.environ["HOME"],
                     "TMPDIR": runner_tmpdir, "LANG": "en_US.UTF-8",
-                    "DEVELOPER_DIR": "/Applications/Xcode_26.2.app/Contents/Developer"}
+                    "DEVELOPER_DIR": "/Applications/Xcode_27.app/Contents/Developer"}
         self.commands, self.simulator, self.planned, self.seal_hash = [], None, None, None
         self.create_attempted = False
         self.report = {"schemaVersion": "conductor.ui-acceptance.v1", "sourceCommit": commit,
@@ -355,13 +355,13 @@ class Acceptance:
         require(architecture == SCOPE["architecture"], "runner_architecture_unavailable")
         self.guard("beforeSourceGuard")
         version = self.run("xcode", ["xcodebuild", "-version"])[0].decode().strip()
-        require(version == "Xcode 26.2\nBuild version 17C52", "xcode_pin_unavailable")
+        require(version == "Xcode 27.0\nBuild version 27A266a", "xcode_pin_unavailable")
         sdk = self.run("sdk", ["xcrun", "--sdk", "iphonesimulator", "--show-sdk-version"])[0].decode().strip()
-        require(sdk == "26.2", "sdk_pin_unavailable")
+        require(sdk == "27.0", "sdk_pin_unavailable")
         runtimes, _ = self.json_command("runtimes", ["xcrun", "simctl", "list", "runtimes", "-j"], seconds=90)
         selected = [r for r in runtimes.get("runtimes", []) if r.get("identifier") == SCOPE["runtime"]]
         require(len(selected) == 1 and selected[0].get("isAvailable") is True
-                and selected[0].get("version") == "26.2", "runtime_pin_unavailable")
+                and selected[0].get("version") == "27.0", "runtime_pin_unavailable")
         supported = selected[0].get("supportedDeviceTypes")
         require(isinstance(supported, list) and any(r.get("identifier") == SCOPE["deviceType"] for r in supported),
                 "runtime_device_intersection_unavailable")
