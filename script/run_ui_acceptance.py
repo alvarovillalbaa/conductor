@@ -16,13 +16,13 @@ import tempfile
 import time
 import uuid
 
-SEAL = "docs/results/2026/11-11/ui-acceptance-source-current-toolchain-5.json"
+SEAL = "docs/results/2026/11-11/ui-acceptance-source-current-toolchain-6.json"
 WORKFLOW = ".github/workflows/ui-acceptance-current-toolchain.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
-         "xcodeVersion": "27.0", "xcodeBuild": "27A266a", "sdk": "27.0",
+         "xcodeVersion": "27.2", "xcodeBuild": "27B52", "sdk": "27.2",
          "architecture": "arm64",
-         "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-0",
+         "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-2",
          "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-17"}
 ATTACHMENTS = {"paused-after-relaunch", "done-after-relaunch"}
 
@@ -49,7 +49,7 @@ class Acceptance:
     def __init__(self, commit):
         require(os.environ.get("GITHUB_ACTIONS") == "true" and os.environ.get("CI") == "true"
                 and os.environ.get("GITHUB_REPOSITORY") == "alvarovillalbaa/conductor"
-                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-current-toolchain-20261111-5",
+                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-current-toolchain-20261111-6",
                 "public_ci_scope_required")
         self.repo = Path.cwd().resolve()
         runner_tmpdir = os.environ["TMPDIR"]
@@ -63,7 +63,7 @@ class Acceptance:
         self.deadline, self.cleanup_deadline = time.monotonic() + 900, None
         self.env = {"PATH": "/usr/bin:/bin:/usr/sbin:/sbin", "HOME": os.environ["HOME"],
                     "TMPDIR": runner_tmpdir, "LANG": "en_US.UTF-8",
-                    "DEVELOPER_DIR": "/Applications/Xcode_27.app/Contents/Developer"}
+                    "DEVELOPER_DIR": "/Applications/Xcode_27.2.app/Contents/Developer"}
         self.commands, self.simulator, self.planned, self.seal_hash = [], None, None, None
         self.create_attempted = False
         self.report = {"schemaVersion": "conductor.ui-acceptance.v1", "sourceCommit": commit,
@@ -360,13 +360,13 @@ class Acceptance:
         require(architecture == SCOPE["architecture"], "runner_architecture_unavailable")
         self.guard("beforeSourceGuard")
         version = self.run("xcode", ["xcodebuild", "-version"])[0].decode().strip()
-        require(version == "Xcode 27.0\nBuild version 27A266a", "xcode_pin_unavailable")
+        require(version == "Xcode 27.2\nBuild version 27B52", "xcode_pin_unavailable")
         sdk = self.run("sdk", ["xcrun", "--sdk", "iphonesimulator", "--show-sdk-version"])[0].decode().strip()
-        require(sdk == "27.0", "sdk_pin_unavailable")
+        require(sdk == "27.2", "sdk_pin_unavailable")
         runtimes, _ = self.json_command("runtimes", ["xcrun", "simctl", "list", "runtimes", "-j"], seconds=90)
         selected = [r for r in runtimes.get("runtimes", []) if r.get("identifier") == SCOPE["runtime"]]
         require(len(selected) == 1 and selected[0].get("isAvailable") is True
-                and selected[0].get("version") == "27.0", "runtime_pin_unavailable")
+                and selected[0].get("version") == "27.2", "runtime_pin_unavailable")
         supported = selected[0].get("supportedDeviceTypes")
         require(isinstance(supported, list) and any(r.get("identifier") == SCOPE["deviceType"] for r in supported),
                 "runtime_device_intersection_unavailable")
@@ -418,14 +418,14 @@ class Acceptance:
         summary, summary_raw = self.json_command("result-summary", ["xcrun", "xcresulttool", "get", "test-results", "summary", "--path", str(result)])
         failures = summary.get("testFailures")
         self.report["xcresult"] = {"summarySha256": sha(summary_raw),
-            "summary": {k: summary.get(k) for k in ("totalTestCount", "passedTests", "failedTests", "skippedTests", "testResults")}}
+            "summary": {k: summary.get(k) for k in ("totalTestCount", "passedTests", "failedTests", "skippedTests", "result")}}
         self.report["xcresult"]["summaryScalars"] = {
             key: value for key, value in summary.items()
             if len(key) <= 80 and (type(value) in (int, float, bool) or
                                   isinstance(value, str) and len(value) <= 256)}
         self.report["xcresult"]["testFailures"] = [
-            {key: self.clean(f[key].encode(), 2000 if key == "message" else 256, head=True)
-             for key in ("testIdentifier", "testName", "message") if isinstance(f.get(key), str)}
+            {key: self.clean(f[key].encode(), 2000 if key == "failureText" else 256, head=True)
+             for key in ("testIdentifier", "testName", "failureText") if isinstance(f.get(key), str)}
             for f in failures[:4] if isinstance(f, dict)] if isinstance(failures, list) else None
         self.report["xcresult"]["testFailureCount"] = len(failures) if isinstance(failures, list) else None
         tests, tests_raw = self.json_command("result-tests", ["xcrun", "xcresulttool", "get", "test-results", "tests", "--path", str(result)])
@@ -438,19 +438,18 @@ class Acceptance:
             nodes.extend((child, parents + [node.get("name")]) for child in node.get("children", []))
         self.report["xcresult"]["cases"] = [{"name": n.get("name"), "parents": p, "status": n.get("result"),
                                             "identifier": n.get("nodeIdentifier")} for n, p in cases]
-        if outcome["exitCode"] != 0:
-            try:
-                self.failure_images(result)
-            except Exception as error:
-                self.report.setdefault("failureImages", {}).update(
-                    {"status": "unavailable", "reason": self.clean(str(error).encode(), 256, head=True)})
+        try:
+            self.retain_images(result)
+        except Exception as error:
+            self.report.setdefault("imageAttachments", {}).update(
+                {"status": "unavailable", "reason": self.clean(str(error).encode(), 256, head=True)})
         require(len(cases) == 1, "xcresult_case_count")
         node, parents = cases[0]
         require(node.get("name") == CASE.split("/")[-1] + "()"
                 and parents.count("ConductorUITests") >= 2 and node.get("result") == "Passed", "xcresult_case_identity_or_status")
         for key, expected in (("totalTestCount", 1), ("passedTests", 1), ("failedTests", 0), ("skippedTests", 0)):
             require(type(summary.get(key)) is int and summary[key] == expected, "xcresult_totals")
-        require(summary.get("testResults") == "Passed" and not summary.get("testFailures"), "xcresult_not_passed")
+        require(summary.get("result") == "Passed" and not summary.get("testFailures"), "xcresult_not_passed")
         require(outcome["exitCode"] == 0 and outcome["stop"] is None, "ui_test_exit_failed")
         # Attachment metadata is optional evidence, never an acceptance substitute.
         try:
@@ -470,7 +469,7 @@ class Acceptance:
         except (Refused, ValueError, KeyError, TypeError):
             self.report["screenshots"]["metadataStatus"] = "unavailable"
 
-    def failure_images(self, result):
+    def retain_images(self, result):
         help_bytes, _ = self.run("failure-export-help", ["xcrun", "xcresulttool", "export", "attachments", "--help"])
         require(all(flag in help_bytes for flag in (b"--path", b"--output-path")), "attachment_export_flags")
         destination = self.root / "failure-attachments"
@@ -478,7 +477,7 @@ class Acceptance:
                                    "--output-path", str(destination)], seconds=60, cap=1024 * 1024)
         files = sorted(destination.rglob("*"))
         require(len(files) <= 256 and all(not path.is_symlink() for path in files), "attachment_export_inventory")
-        self.report["failureImages"] = {"exportMessage": self.clean(exported, 1000, head=True),
+        self.report["imageAttachments"] = {"exportMessage": self.clean(exported, 1000, head=True),
             "inventory": [{"file": path.name[:160], "bytes": path.stat().st_size}
                           for path in files if path.is_file()][:32]}
         images = [path for path in files if path.is_file() and path.suffix.lower() == ".png"]
@@ -491,11 +490,11 @@ class Acceptance:
             require(path.stat().st_size <= 4 * 1024 * 1024, "attachment_image_bound")
             data = path.read_bytes()
             require(data.startswith(b"\x89PNG\r\n\x1a\n"), "attachment_image_type")
-            name = "editor-failure-" + str(index + 1) + ".png"
+            name = "ui-attachment-" + str(index + 1) + ".png"
             with (output / name).open("xb") as handle:
                 handle.write(data)
             retained.append({"file": name, "bytes": len(data), "sha256": sha(data)})
-        self.report["failureImages"].update({"status": "retained", "images": retained,
+        self.report["imageAttachments"].update({"status": "retained", "images": retained,
                                             "omittedImages": max(0, len(images) - 8)})
 
     def cleanup(self):

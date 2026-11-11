@@ -98,3 +98,25 @@ all acceptance/cleanup gates remain. Scalar summary fields are recorded to make
 the installed tool's result schema inspectable. App/core/project source and all
 journey assertions/actions remain unchanged.
 [Apple screenshot representations](https://developer.apple.com/documentation/xcuiautomation/xcuiscreenshot) · [Apple xcresulttool manual](https://keith.github.io/xcode-man-pages/xcresulttool.1.html)
+
+## Newer installed runtime
+
+The [fifth run](https://github.com/alvarovillalbaa/conductor/actions/runs/42995998127)
+failed during `app.launch()` with Xcode's launch timeout. It did not reach the
+create-plan tap, the minutes query or the authored screenshot. Export inventory
+records the system screen recording and launch diagnostics; no PNG existed.
+Both guards, all subprocess reaps and simulator/scratch cleanup passed. Its
+[original report](../results/2026/11-11/ui-acceptance-current-toolchain-5.json)
+is 15,955 bytes, SHA-256 `e1e18d3ac4f21e4cc9ee1c3768b3a158908d8854462221028581d5af4133d730`.
+This run supplies no editor diagnosis.
+
+The same published runner inventory includes Xcode 27.2/27B52, SDK/runtime 27.2
+and iPhone 17. The sixth source selects that newer installed combination and
+keeps the same case, device model, deadlines and cleanup. No stability or root
+cause claim is made from the inventory. It is a changed environment rather
+than a repeat of the failed 27.0 launch. The fifth report's actual summary uses
+`result`, so the controller now requires that field to equal `Passed`, together
+with the original exact-case, counts, empty-failures and zero-exit gates.
+Bounded image export now runs after either outcome, so a passing case can retain
+its existing paused/done captures for actual visual inspection in the same job.
+The new report field is `imageAttachments`; image retention is diagnostic only.

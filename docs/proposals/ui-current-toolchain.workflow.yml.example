@@ -5,12 +5,12 @@ permissions:
   contents: read
 jobs:
   ui-acceptance:
-    if: github.repository == 'alvarovillalbaa/conductor' && github.event.repository.private == false && github.event.ref_type == 'branch' && github.event.ref == 'qa/conductor-current-toolchain-20261111-5'
+    if: github.repository == 'alvarovillalbaa/conductor' && github.event.repository.private == false && github.event.ref_type == 'branch' && github.event.ref == 'qa/conductor-current-toolchain-20261111-6'
     runs-on: xcode-27
     timeout-minutes: 20
     env:
       SOURCE_COMMIT: APPROVED_SOURCE_COMMIT
-      DEVELOPER_DIR: /Applications/Xcode_27.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_27.2.app/Contents/Developer
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
