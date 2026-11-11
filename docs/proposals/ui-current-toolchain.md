@@ -166,3 +166,25 @@ branch; selecting that runner with exactly one worker preserves serial execution
 and enables the required report. No timeout or verdict gate changes. Image
 retention now also updates the legacy `pixelsRetained` flag accurately; raw prior
 receipts remain unchanged. [SwiftPM test command](https://github.com/swiftlang/swift-package-manager/blob/main/Sources/Commands/SwiftTestCommand.swift)
+
+## Terminal result
+
+The [eighth run](https://github.com/alvarovillalbaa/conductor/actions/runs/43000742926)
+passed all seven file-store cases. The actual [xUnit XML](../results/2026/11-11/workspace-file-store-tests.xml)
+was downloaded and independently checked against the case names at source
+`cb542661210e28d6b2396cec9f7aa06845c2483a`: seven cases, zero failures/errors/skips,
+with matching 1,211-byte size and SHA-256 `187745f14e5a7c5d8e788813f7b77786fca768bc75670326dcce4b5a5faf8263`.
+Both 54-input source guards, all 26 process reaps and owned simulator/scratch
+cleanup passed. The [original report](../results/2026/11-11/ui-acceptance-current-toolchain-8.json)
+is 17,017 bytes, SHA-256 `8474f4079768d3b12ce53a4e60223d2c477e9a73b203e34637ab3ebaa65956e8`.
+
+The UI case failed in `app.launch()` with Xcode's launch timeout and simulator
+service connection errors, reaching the original 180-second case allowance.
+No plan-creation action, repaired-screen capture or persistence journey ran.
+That infrastructure symptom has no established cause here. The storage pass
+does not supply the missing iOS UI acceptance. Preserve all previous failures,
+especially the second profile's unverified explicit simulator deletion.
+
+The source repair and results are published with the active temporary workflow
+omitted. Its inactive template remains. Further UI execution requires new startup
+evidence or an applicable environment repair, rather than an unchanged retry.

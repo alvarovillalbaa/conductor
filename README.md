@@ -12,15 +12,14 @@ The later app icon passed its SVG/PNG comparison, metadata checks and
 Its system appearance remains unverified.
 This is not a released iOS application.
 
-On 4 November, [UI attempt 8](docs/results/2026/11-04/ui-acceptance-attempt-8.md)
-executed the exact authored case and failed waiting for the minutes Stepper:
-1 test, 0 passed, 1 failed. [Attempt 9](docs/results/2026/11-04/ui-acceptance-attempt-9.md)
-then stopped at the post-boot device inventory's 90-second deadline, before any
-UI case or Stepper diagnostic. Both attempts verified owned-resource cleanup.
-The query's cause and actual accessibility element type remain unknown.
-Further Conductor execution is pending an external tool/service change or an
-evidence-supported source repair; unchanged retries, longer timeouts and weaker
-identity checks are not the next step.
+On 11 November, the actual failure screenshot revealed that a fresh install
+entered recovery for its absent workspace file, disabling plan creation. The
+[file-store repair](docs/fixes/fresh-install-workspace.md) now confirms filesystem
+absence before returning an empty workspace and preserves errors for existing
+paths. Seven focused storage regressions passed on macOS in CI. The subsequent
+iOS case failed during Xcode app launch before reaching the repaired screen;
+the full UI journey remains unverified. Earlier failures and their source seals
+are preserved in the [current-toolchain evidence](docs/proposals/ui-current-toolchain.md).
 
 ## Intended workflow
 
@@ -76,11 +75,13 @@ revision; later UI preparation has separate source seals and results. Reproduce
 the guarded compilation at the receipt's revision. System appearance, screenshots
 and App Store publication remain open.
 
-The latest UI diagnostic source was checked at
-`ca8fb846490fb587730ead0029644182b4013206`, but did not reach XCTest. This later
-documentation edition changes only this README and the
-[UI status/contract](docs/proposals/ui-acceptance.md); its other 49 sealed inputs
-remain unchanged. Keep the original seal and reproduce that exact pinned source.
+The current repair was checked at
+`cb542661210e28d6b2396cec9f7aa06845c2483a` with Xcode 27.2, iOS Simulator 27.2
+and iPhone 17 on arm64. Storage checks use the same Foundation file-store source
+in a separate SwiftPM test target. This publication updates documentation and
+retains results; application, package, tests and controller bytes match that
+checked source. Reproduce its exact source seal rather than applying it to this
+later documentation edition.
 
 ## Scope and evidence
 
@@ -93,6 +94,7 @@ remain unchanged. Keep the original seal and reproduce that exact pinned source.
 - [App-icon source evidence](docs/results/2026/10-28/app-icon.md)
 - [App-icon compilation results](docs/results/2026/10-31/app-icon-build.md)
 - [UI acceptance status and source contract](docs/proposals/ui-acceptance.md)
+- [Fresh-install workspace repair and verification limits](docs/fixes/fresh-install-workspace.md)
 
 This local app needs neither Vercel nor Supabase. Source publication does not
 establish working native delivery; the broader all-project goal remains active.

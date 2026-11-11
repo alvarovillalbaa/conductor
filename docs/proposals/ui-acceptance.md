@@ -1,10 +1,19 @@
 # One real UI acceptance case — status and source contract
 
-Original preparation: 31 October 2026. Update: 4 November 2026. The prepared scope
-is one public `macos-15` job, capped at 20 minutes. UI acceptance remains unmet;
-further execution is pending an external tool/service change or an
-evidence-supported source repair. No unchanged retry, timeout increase or weakened
-identity gate is scheduled.
+Original preparation: 31 October 2026. Current status: 11 November 2026.
+UI acceptance remains unmet. The [current-toolchain work](ui-current-toolchain.md)
+retains the later environment changes and actual editor-failure screenshot.
+The [fresh-install repair](../fixes/fresh-install-workspace.md) passed seven
+focused macOS file-store regressions, but its iOS case stopped during app launch
+before exercising the repaired screen. The original one-case assertions remain,
+with an added enabled-control check. No unchanged retry, longer timeout or weaker
+identity gate is scheduled. Further UI execution needs new startup evidence or
+an applicable tool/service repair.
+
+The sections below preserve the original Xcode 16.4/macOS 15 contract and its
+31 October–4 November history. Current source/tool pins and supplementary storage
+checks are documented in the linked 11 November preparation and its separate
+source seals.
 [Attempt 1](../results/2026/10-31/ui-acceptance-attempt-1.md) reached the first
 installed-runtime query's 30-second deadline before simulator creation or UI
 execution. That timeout does not establish runtime absence or a transient cause.

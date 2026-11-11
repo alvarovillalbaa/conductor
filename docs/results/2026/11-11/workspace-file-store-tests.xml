@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<testsuites>
+<testsuite name="TestResults" errors="0" tests="7" failures="0" time="0.6622036250000001">
+<testcase classname="ConductorFileStoreTests.WorkspaceFileStoreTests" name="testDirectoryAtFilePathIsNotTreatedAsNewWorkspace" time="0.123562666">
+</testcase>
+<testcase classname="ConductorFileStoreTests.WorkspaceFileStoreTests" name="testMalformedFileRemainsRecoverable" time="0.087103083">
+</testcase>
+<testcase classname="ConductorFileStoreTests.WorkspaceFileStoreTests" name="testMissingFileLoadsEmptyWithoutWriting" time="0.096124959">
+</testcase>
+<testcase classname="ConductorFileStoreTests.WorkspaceFileStoreTests" name="testMissingParentLoadsEmptyWithoutWriting" time="0.100509583">
+</testcase>
+<testcase classname="ConductorFileStoreTests.WorkspaceFileStoreTests" name="testOversizedFileRemainsRecoverable" time="0.087003">
+</testcase>
+<testcase classname="ConductorFileStoreTests.WorkspaceFileStoreTests" name="testSavedWorkspaceReloadsWithoutChangingBytes" time="0.086119917">
+</testcase>
+<testcase classname="ConductorFileStoreTests.WorkspaceFileStoreTests" name="testUnavailableDirectoryFails" time="0.081780417">
+</testcase>
+</testsuite>
+</testsuites>
