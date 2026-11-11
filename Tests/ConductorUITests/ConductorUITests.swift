@@ -138,7 +138,8 @@ final class ConductorUITests: XCTestCase {
     @MainActor
     private func screenshot(_ name: String, app: XCUIApplication) {
         XCTContext.runActivity(named: name) { activity in
-            let attachment = XCTAttachment(screenshot: app.screenshot())
+            let attachment = XCTAttachment(data: app.screenshot().pngRepresentation,
+                                           uniformTypeIdentifier: "public.png")
             attachment.name = name
             attachment.lifetime = .keepAlways
             activity.add(attachment)

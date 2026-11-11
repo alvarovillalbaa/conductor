@@ -66,7 +66,7 @@ failed jobs. [Apple test automation](https://developer.apple.com/library/archive
 
 The [third run](https://github.com/alvarovillalbaa/conductor/actions/runs/42992082373)
 executed the actual case and failed at the Stepper lookup. The failure-only
-projection found the New Plan navigation bar and no matching plan identifier.
+projection found one New Plan element (raw type 9) and no matching plan identifier.
 Both source guards and owned simulator/scratch cleanup passed. Its
 [original JSON](../results/2026/11-11/ui-acceptance-current-toolchain-3.json)
 is 12,006 bytes with SHA-256 `4aaaee09587128dd57348621be071039e0fcce68ce1cde5d183ec183ad486ee7`.
@@ -80,3 +80,21 @@ The simulator contains only the authored test. No user account or existing data
 is present. The diagnostic is intended to determine whether the form is rendered
 and how its controls appear to accessibility. It does not qualify a failed case
 as accepted.
+
+The [fourth run](https://github.com/alvarovillalbaa/conductor/actions/runs/42994041805)
+executed and failed at the same assertion. Its [original report](../results/2026/11-11/ui-acceptance-current-toolchain-4.json)
+is 12,715 bytes, SHA-256 `0ae9e204fda670ac365e8ac6cabd12948053db4ebd160ac72109664a73c740c3`.
+Both guards, all subprocess reaps and simulator/scratch cleanup passed. Attachment
+export exited zero but the PNG inventory gate refused retention; no pixels were
+available or viewed. The prior numeric element type was not a verified navigation
+bar classification.
+
+The fifth preparation corrects that evidence boundary. XCTest explicitly attaches
+PNG data. On failure, the exporter includes attachments from the single authored
+case instead of filtering to attachments associated with the assertion itself;
+the capture activity precedes that assertion. The report retains bounded export
+output/inventory and the beginning of the XCTest activity log. Image bounds and
+all acceptance/cleanup gates remain. Scalar summary fields are recorded to make
+the installed tool's result schema inspectable. App/core/project source and all
+journey assertions/actions remain unchanged.
+[Apple screenshot representations](https://developer.apple.com/documentation/xcuiautomation/xcuiscreenshot) · [Apple xcresulttool manual](https://keith.github.io/xcode-man-pages/xcresulttool.1.html)

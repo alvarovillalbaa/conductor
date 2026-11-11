@@ -16,7 +16,7 @@ import tempfile
 import time
 import uuid
 
-SEAL = "docs/results/2026/11-11/ui-acceptance-source-current-toolchain-4.json"
+SEAL = "docs/results/2026/11-11/ui-acceptance-source-current-toolchain-5.json"
 WORKFLOW = ".github/workflows/ui-acceptance-current-toolchain.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
@@ -49,7 +49,7 @@ class Acceptance:
     def __init__(self, commit):
         require(os.environ.get("GITHUB_ACTIONS") == "true" and os.environ.get("CI") == "true"
                 and os.environ.get("GITHUB_REPOSITORY") == "alvarovillalbaa/conductor"
-                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-current-toolchain-20261111-4",
+                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-current-toolchain-20261111-5",
                 "public_ci_scope_required")
         self.repo = Path.cwd().resolve()
         runner_tmpdir = os.environ["TMPDIR"]
@@ -167,6 +167,9 @@ class Acceptance:
                         row["firstFailureMessagesByStream"][name] = self.clean(line, 1500, head=True)
                         break
             if label == "ui-test":
+                start = out.find(b"Test Case '-[ConductorUITests.ConductorUITests ")
+                if start >= 0:
+                    row["activityLogHead"] = self.clean(out[start:], 6000, head=True)
                 try:
                     evidence = self.destination_diagnostic(err)
                     if evidence is not None:
@@ -416,6 +419,10 @@ class Acceptance:
         failures = summary.get("testFailures")
         self.report["xcresult"] = {"summarySha256": sha(summary_raw),
             "summary": {k: summary.get(k) for k in ("totalTestCount", "passedTests", "failedTests", "skippedTests", "testResults")}}
+        self.report["xcresult"]["summaryScalars"] = {
+            key: value for key, value in summary.items()
+            if len(key) <= 80 and (type(value) in (int, float, bool) or
+                                  isinstance(value, str) and len(value) <= 256)}
         self.report["xcresult"]["testFailures"] = [
             {key: self.clean(f[key].encode(), 2000 if key == "message" else 256, head=True)
              for key in ("testIdentifier", "testName", "message") if isinstance(f.get(key), str)}
@@ -435,7 +442,8 @@ class Acceptance:
             try:
                 self.failure_images(result)
             except Exception as error:
-                self.report["failureImages"] = {"status": "unavailable", "reason": type(error).__name__}
+                self.report.setdefault("failureImages", {}).update(
+                    {"status": "unavailable", "reason": self.clean(str(error).encode(), 256, head=True)})
         require(len(cases) == 1, "xcresult_case_count")
         node, parents = cases[0]
         require(node.get("name") == CASE.split("/")[-1] + "()"
@@ -464,12 +472,15 @@ class Acceptance:
 
     def failure_images(self, result):
         help_bytes, _ = self.run("failure-export-help", ["xcrun", "xcresulttool", "export", "attachments", "--help"])
-        require(all(flag in help_bytes for flag in (b"--path", b"--output-path", b"--only-failures")), "attachment_export_flags")
+        require(all(flag in help_bytes for flag in (b"--path", b"--output-path")), "attachment_export_flags")
         destination = self.root / "failure-attachments"
-        self.run("failure-export", ["xcrun", "xcresulttool", "export", "attachments", "--path", str(result),
-                                   "--output-path", str(destination), "--only-failures"], seconds=60, cap=1024 * 1024)
+        exported, _ = self.run("failure-export", ["xcrun", "xcresulttool", "export", "attachments", "--path", str(result),
+                                   "--output-path", str(destination)], seconds=60, cap=1024 * 1024)
         files = sorted(destination.rglob("*"))
         require(len(files) <= 256 and all(not path.is_symlink() for path in files), "attachment_export_inventory")
+        self.report["failureImages"] = {"exportMessage": self.clean(exported, 1000, head=True),
+            "inventory": [{"file": path.name[:160], "bytes": path.stat().st_size}
+                          for path in files if path.is_file()][:32]}
         images = [path for path in files if path.is_file() and path.suffix.lower() == ".png"]
         require(images and len(images) <= 32, "attachment_image_count")
         output = self.parent / ("conductor-ui-images-" + os.environ["GITHUB_RUN_ID"])
@@ -484,8 +495,8 @@ class Acceptance:
             with (output / name).open("xb") as handle:
                 handle.write(data)
             retained.append({"file": name, "bytes": len(data), "sha256": sha(data)})
-        self.report["failureImages"] = {"status": "retained", "images": retained,
-                                       "omittedImages": max(0, len(images) - 8)}
+        self.report["failureImages"].update({"status": "retained", "images": retained,
+                                            "omittedImages": max(0, len(images) - 8)})
 
     def cleanup(self):
         if self.cleanup_deadline is None:
