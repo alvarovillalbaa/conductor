@@ -17,7 +17,7 @@ import time
 import uuid
 import xml.etree.ElementTree as ET
 
-SEAL = "docs/results/2026/11-11/ui-acceptance-source-current-toolchain-7.json"
+SEAL = "docs/results/2026/11-11/ui-acceptance-source-current-toolchain-8.json"
 WORKFLOW = ".github/workflows/ui-acceptance-current-toolchain.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
@@ -51,7 +51,7 @@ class Acceptance:
     def __init__(self, commit):
         require(os.environ.get("GITHUB_ACTIONS") == "true" and os.environ.get("CI") == "true"
                 and os.environ.get("GITHUB_REPOSITORY") == "alvarovillalbaa/conductor"
-                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-current-toolchain-20261111-7",
+                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-current-toolchain-20261111-8",
                 "public_ci_scope_required")
         self.repo = Path.cwd().resolve()
         runner_tmpdir = os.environ["TMPDIR"]
@@ -421,6 +421,7 @@ class Acceptance:
             "--config-path", str(self.root / "package-config"), "--security-path", str(self.root / "package-security"),
             "--manifest-cache", "local", "--skip-update", "--disable-index-store",
             "--enable-xctest", "--disable-swift-testing",
+            "--parallel", "--num-workers", "1",
             "--filter", SCOPE["storageTestFilter"], "--xunit-output", str(result)],
             seconds=180, cap=1024 * 1024, accept_failure=True)
         require(result.is_file() and not result.is_symlink() and result.stat().st_size <= 65536,
@@ -540,6 +541,7 @@ class Acceptance:
             retained.append({"file": name, "bytes": len(data), "sha256": sha(data)})
         self.report["imageAttachments"].update({"status": "retained", "images": retained,
                                             "omittedImages": max(0, len(images) - 8)})
+        self.report["screenshots"]["pixelsRetained"] = bool(retained)
 
     def cleanup(self):
         if self.cleanup_deadline is None:

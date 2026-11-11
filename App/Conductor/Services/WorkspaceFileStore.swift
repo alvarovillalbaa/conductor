@@ -39,7 +39,12 @@ struct WorkspaceFileStore {
         let handle: FileHandle
         do { handle = try FileHandle(forReadingFrom: fileURL) }
         catch let error as CocoaError where error.code == .fileNoSuchFile || error.code == .fileReadNoSuchFile {
-            return Workspace()
+            // FileHandle can report an existing directory as missing. Confirm absence first.
+            do { _ = try FileManager.default.attributesOfItem(atPath: fileURL.path) }
+            catch let metadataError as CocoaError where metadataError.code == .fileNoSuchFile || metadataError.code == .fileReadNoSuchFile {
+                return Workspace()
+            }
+            throw error
         }
         defer { try? handle.close() }
         var data = Data()

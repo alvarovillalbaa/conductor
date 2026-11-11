@@ -148,3 +148,21 @@ under owned scratch, with a retained xUnit XML and exact-case/exit/failure gates
 The existing forty core cases are not selected. The original iOS UI journey then
 runs once, with an added enabled-state assertion before taps. All earlier action
 and completion assertions, time limits and source/cleanup guards remain.
+
+The [seventh run](https://github.com/alvarovillalbaa/conductor/actions/runs/42999934115)
+built the focused tests and recorded a failed directory-preservation assertion:
+`FileHandle`'s missing-file category alone was not enough to prove absence.
+No xUnit file was produced in serial XCTest mode, so the controller also refused
+its report gate and created no simulator. Both source guards, reaps and scratch
+cleanup passed. Its [7,663-byte original report](../results/2026/11-11/ui-acceptance-current-toolchain-7.json)
+has SHA-256 `dc96e77e6d414eb8ba799c4ed7e0d11309ad49533562be6adab7f78bb259ce45`.
+No storage/UI pass is claimed for that invocation.
+
+The eighth preparation confirms absence with throwing filesystem metadata after
+the missing-category open error. Existing paths rethrow the original open error;
+other metadata errors propagate. It keeps all seven regression expectations.
+SwiftPM's primary source generates XCTest xUnit output in its parallel-runner
+branch; selecting that runner with exactly one worker preserves serial execution
+and enables the required report. No timeout or verdict gate changes. Image
+retention now also updates the legacy `pixelsRetained` flag accurately; raw prior
+receipts remain unchanged. [SwiftPM test command](https://github.com/swiftlang/swift-package-manager/blob/main/Sources/Commands/SwiftTestCommand.swift)
