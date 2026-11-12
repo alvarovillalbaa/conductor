@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """One source-pinned UI case on one disposable, identity-checked CI simulator."""
 import argparse
+import gzip
 import hashlib
 import json
 import os
@@ -15,17 +16,16 @@ import sys
 import tempfile
 import time
 import uuid
-import xml.etree.ElementTree as ET
 
-SEAL = "docs/results/2026/11-11/ui-acceptance-source-current-toolchain-8.json"
-WORKFLOW = ".github/workflows/ui-acceptance-current-toolchain.yml"
+SEAL = "docs/results/2026/11-13/ui-acceptance-source-startup.json"
+WORKFLOW = ".github/workflows/ui-acceptance-startup.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
          "xcodeVersion": "27.2", "xcodeBuild": "27B52", "sdk": "27.2",
          "architecture": "arm64",
          "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-2",
          "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-17",
-         "storageTestFilter": "ConductorFileStoreTests.WorkspaceFileStoreTests", "expectedStorageCases": 7}
+         "startup": "boot-readiness-native-launch-uninstall-before-unchanged-ui-case"}
 ATTACHMENTS = {"paused-after-relaunch", "done-after-relaunch"}
 
 
@@ -51,7 +51,7 @@ class Acceptance:
     def __init__(self, commit):
         require(os.environ.get("GITHUB_ACTIONS") == "true" and os.environ.get("CI") == "true"
                 and os.environ.get("GITHUB_REPOSITORY") == "alvarovillalbaa/conductor"
-                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-current-toolchain-20261111-8",
+                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-startup-20261113",
                 "public_ci_scope_required")
         self.repo = Path.cwd().resolve()
         runner_tmpdir = os.environ["TMPDIR"]
@@ -68,6 +68,10 @@ class Acceptance:
                     "DEVELOPER_DIR": "/Applications/Xcode_27.2.app/Contents/Developer"}
         self.commands, self.simulator, self.planned, self.seal_hash = [], None, None, None
         self.create_attempted = False
+        run_id = os.environ["GITHUB_RUN_ID"]
+        require(re.fullmatch(r"[0-9]+", run_id) is not None, "artifact_run_id")
+        self.streams_path = self.parent / ("conductor-ui-streams-" + run_id)
+        self.streams_path.mkdir(mode=0o700)
         self.report = {"schemaVersion": "conductor.ui-acceptance.v1", "sourceCommit": commit,
                        "scope": SCOPE, "status": "failed", "commands": self.commands,
                        "screenshots": {"pixelsRetained": False, "viewed": False, "metadata": []}}
@@ -185,6 +189,14 @@ class Acceptance:
                 except Exception:
                     row["stepperEvidence"] = {"diagnosticOnly": True, "status": "unavailable"}
         row["reaped"] = p.poll() is not None
+        for name, data in (("stdout", out), ("stderr", err)):
+            filename = str(len(self.commands) + 1).zfill(2) + "-" + label + "." + name + ".txt"
+            require(re.fullmatch(r"[0-9]+-[a-z0-9-]+\.(stdout|stderr)\.txt", filename) is not None,
+                    "stream_filename_invalid")
+            with (self.streams_path / filename).open("xb") as handle:
+                handle.write(data)
+            row[name]["file"] = self.streams_path.name + "/" + filename
+            row[name]["complete"] = counts[0 if name == "stdout" else 1] == len(data)
         self.commands.append(row)
         require(accept_failure or (code == 0 and reason is None), label + "_failed")
         return out, row
@@ -376,7 +388,11 @@ class Acceptance:
         require(any(r.get("identifier") == SCOPE["deviceType"] and r.get("name") == "iPhone 17"
                     for r in types.get("devicetypes", [])), "device_type_unavailable")
         self.report["toolchain"].update({"xcode": version, "sdk": sdk, "runtime": SCOPE["runtime"], "deviceType": SCOPE["deviceType"]})
-        self.storage_tests()
+        self.run("build-for-testing", ["xcodebuild", "-project", "Conductor.xcodeproj",
+            "-scheme", SCOPE["scheme"], "-configuration", "Debug", "-sdk", "iphonesimulator",
+            "-destination", "generic/platform=iOS Simulator", "-derivedDataPath", str(self.root / "DerivedData"),
+            "-disableAutomaticPackageResolution", "-skipPackageUpdates", "CODE_SIGNING_ALLOWED=NO",
+            "ARCHS=arm64", "ONLY_ACTIVE_ARCH=YES", "build-for-testing"], seconds=240, cap=4 * 1024 * 1024)
         self.planned = {"name": "conductor-ui-" + self.nonce, "runtime": SCOPE["runtime"], "deviceType": SCOPE["deviceType"]}
         require(not any(r.get("name") == self.planned["name"] for _, r in self.devices()), "device_name_already_exists")
         self.write_ledger("planned-device.json", self.planned)
@@ -388,8 +404,9 @@ class Acceptance:
         self.verify_ledgers()
         device = self.owned_device()
         require(device is not None and device["state"] == "Shutdown", "fresh_device_not_shutdown")
-        self.report["simulatorStartup"] = {"owner": "xcodebuild test", "destination": self.simulator,
-                                           "initialState": device["state"]}
+        self.report["simulatorStartup"] = {"owner": "controller", "destination": self.simulator,
+                                           "initialState": device["state"], "status": "failed"}
+        self.startup()
 
     def write_ledger(self, name, value):
         self.owner()
@@ -408,47 +425,52 @@ class Acceptance:
                 require(p.is_file() and not p.is_symlink() and p.stat().st_size < 4096
                         and json.loads(p.read_text()) == value, "device_ledger_changed")
 
-    def storage_tests(self):
-        help_bytes, _ = self.run("storage-test-help", ["swift", "test", "--help"])
-        require(all(flag in help_bytes for flag in (b"--xunit-output", b"--filter", b"--scratch-path")),
-                "storage_test_flags_unavailable")
-        fixtures = self.root / "storage-fixtures"
-        fixtures.mkdir()
-        self.env["CONDUCTOR_STORAGE_TEST_ROOT"] = str(fixtures)
-        result = self.root / "storage-tests.xml"
-        _, outcome = self.run("storage-tests", ["swift", "test", "--package-path", str(self.repo),
-            "--scratch-path", str(self.root / "StorageBuild"), "--cache-path", str(self.root / "package-cache"),
-            "--config-path", str(self.root / "package-config"), "--security-path", str(self.root / "package-security"),
-            "--manifest-cache", "local", "--skip-update", "--disable-index-store",
-            "--enable-xctest", "--disable-swift-testing",
-            "--parallel", "--num-workers", "1",
-            "--filter", SCOPE["storageTestFilter"], "--xunit-output", str(result)],
-            seconds=180, cap=1024 * 1024, accept_failure=True)
-        require(result.is_file() and not result.is_symlink() and result.stat().st_size <= 65536,
-                "storage_xunit_unavailable")
-        raw = result.read_bytes()
-        root = ET.fromstring(raw)
-        cases = root.findall(".//testcase")
-        names = [case.get("name") for case in cases]
-        run_id = os.environ["GITHUB_RUN_ID"]
-        require(re.fullmatch(r"[0-9]+", run_id) is not None, "artifact_run_id")
-        name = "conductor-storage-" + run_id + ".xml"
-        with (self.parent / name).open("xb") as handle:
-            handle.write(raw)
-        self.report["storageTests"] = {"status": "failed", "cases": names,
-            "xunit": {"file": name, "bytes": len(raw), "sha256": sha(raw)}}
-        expected = {"testMissingParentLoadsEmptyWithoutWriting", "testMissingFileLoadsEmptyWithoutWriting",
-            "testSavedWorkspaceReloadsWithoutChangingBytes", "testMalformedFileRemainsRecoverable",
-            "testOversizedFileRemainsRecoverable", "testDirectoryAtFilePathIsNotTreatedAsNewWorkspace",
-            "testUnavailableDirectoryFails"}
-        require(len(cases) == SCOPE["expectedStorageCases"] and set(names) == expected
-                and all(case.get("classname", "").split(".")[-1] == "WorkspaceFileStoreTests" for case in cases),
-                "storage_case_identity_or_count")
-        require(not root.findall(".//failure") and not root.findall(".//error") and not root.findall(".//skipped")
-                and all(suite.get(key, "0") == "0" for suite in root.iter("testsuite")
-                        for key in ("failures", "errors", "skipped")), "storage_cases_not_passed")
-        require(outcome["exitCode"] == 0 and outcome["stop"] is None, "storage_test_exit_failed")
-        self.report["storageTests"]["status"] = "passed"
+    def startup(self):
+        boot_help, _ = self.run("bootstatus-help", ["xcrun", "simctl", "help", "bootstatus"])
+        require(b"-b" in boot_help, "bootstatus_flag_unavailable")
+        self.run("boot-readiness", ["xcrun", "simctl", "bootstatus", self.simulator, "-b"], seconds=120)
+        device = self.owned_device()
+        require(device is not None and device["state"] == "Booted", "startup_device_not_booted")
+        bundle = "com.alvarovillalbaa.Conductor"
+        app = self.root / "DerivedData/Build/Products/Debug-iphonesimulator/Conductor.app"
+        require(app.is_dir() and not app.is_symlink(), "startup_app_missing")
+        self.run("startup-install", ["xcrun", "simctl", "install", self.simulator, str(app)])
+        raw, _ = self.run("startup-data-container", ["xcrun", "simctl", "get_app_container", self.simulator, bundle, "data"])
+        container = Path(raw.decode().strip())
+        require(container.is_absolute() and container.is_dir() and not container.is_symlink()
+                and self.simulator in container.parts and "Containers" in container.parts,
+                "startup_container_identity_invalid")
+        workspace = container / "Library/Application Support/Conductor/workspace.json"
+        require(not os.path.lexists(workspace), "startup_workspace_already_exists")
+        raw, _ = self.run("startup-launch", ["xcrun", "simctl", "launch", self.simulator, bundle,
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
+        match = re.fullmatch(re.escape(bundle) + r": ([1-9][0-9]*)\s*", raw.decode())
+        require(match is not None, "startup_launch_pid_missing")
+        pid = int(match.group(1))
+        time.sleep(3)
+        raw, _ = self.run("startup-process", ["xcrun", "simctl", "spawn", self.simulator, "launchctl", "list"])
+        rows = [line.split() for line in raw.decode().splitlines() if bundle in line]
+        require(len(rows) == 1 and len(rows[0]) == 3 and rows[0][0] == str(pid)
+                and rows[0][2].startswith("UIKitApplication:" + bundle + "["), "startup_process_not_alive")
+        output = self.parent / ("conductor-startup-" + os.environ["GITHUB_RUN_ID"])
+        output.mkdir(mode=0o700)
+        picture = output / "fresh-install.png"
+        self.run("startup-screenshot", ["xcrun", "simctl", "io", self.simulator, "screenshot", "--type=png", str(picture)])
+        require(picture.is_file() and not picture.is_symlink() and picture.stat().st_size <= 4 * 1024 * 1024,
+                "startup_image_bound")
+        pixels = picture.read_bytes()
+        require(pixels.startswith(b"\x89PNG\r\n\x1a\n"), "startup_image_type")
+        require(not os.path.lexists(workspace), "startup_unexpected_workspace_write")
+        self.report["simulatorStartup"].update({"status": "passed", "launchPid": pid,
+            "workspaceAbsentBeforeAndAfterLaunch": True,
+            "image": {"file": output.name + "/fresh-install.png", "bytes": len(pixels), "sha256": sha(pixels), "viewed": False}})
+        self.run("startup-terminate", ["xcrun", "simctl", "terminate", self.simulator, bundle])
+        self.run("startup-uninstall", ["xcrun", "simctl", "uninstall", self.simulator, bundle])
+        require(not container.exists(), "startup_app_data_not_removed")
+        _, missing = self.run("startup-confirm-uninstalled", ["xcrun", "simctl", "get_app_container", self.simulator, bundle, "data"],
+                              accept_failure=True)
+        require(missing["exitCode"] not in (0, None) and missing["stop"] is None, "startup_uninstall_not_confirmed")
+        self.report["simulatorStartup"]["appAndDataRemovedBeforeUITest"] = True
 
     def test(self):
         result = self.root / "ui.xcresult"
@@ -458,7 +480,7 @@ class Acceptance:
             "-resultBundlePath", str(result), "-resultBundleVersion", "3", "-only-testing:" + CASE,
             "-parallel-testing-enabled", "NO", "-enableCodeCoverage", "NO",
             "-test-timeouts-enabled", "YES",
-            "-disableAutomaticPackageResolution", "-skipPackageUpdates", "CODE_SIGNING_ALLOWED=NO", "ARCHS=arm64", "ONLY_ACTIVE_ARCH=YES", "test"],
+            "-disableAutomaticPackageResolution", "-skipPackageUpdates", "CODE_SIGNING_ALLOWED=NO", "ARCHS=arm64", "ONLY_ACTIVE_ARCH=YES", "test-without-building"],
             seconds=600, cap=4 * 1024 * 1024, accept_failure=True)
         summary, summary_raw = self.json_command("result-summary", ["xcrun", "xcresulttool", "get", "test-results", "summary", "--path", str(result)])
         failures = summary.get("testFailures")
@@ -525,6 +547,26 @@ class Acceptance:
         self.report["imageAttachments"] = {"exportMessage": self.clean(exported, 1000, head=True),
             "inventory": [{"file": path.name[:160], "bytes": path.stat().st_size}
                           for path in files if path.is_file()][:32]}
+        diagnostics = [path for path in files if path.is_file() and
+                       (path.name.startswith("Spindump_") and path.suffix == ".txt"
+                        or path.name == "Complete Issue Description.txt")]
+        require(len(diagnostics) <= 4 and sum(path.stat().st_size for path in diagnostics) <= 16 * 1024 * 1024,
+                "failure_text_bound")
+        if diagnostics:
+            output = self.parent / ("conductor-ui-diagnostics-" + os.environ["GITHUB_RUN_ID"])
+            output.mkdir(mode=0o700)
+            retained = []
+            for index, path in enumerate(diagnostics):
+                raw = path.read_bytes()
+                compressed = gzip.compress(raw, mtime=0)
+                require(len(compressed) <= 2 * 1024 * 1024, "compressed_failure_text_bound")
+                name = "diagnostic-" + str(index + 1) + ".txt.gz"
+                with (output / name).open("xb") as handle:
+                    handle.write(compressed)
+                retained.append({"originalName": path.name, "file": output.name + "/" + name,
+                                 "bytes": len(raw), "sha256": sha(raw),
+                                 "compressedBytes": len(compressed), "compressedSha256": sha(compressed)})
+            self.report["imageAttachments"]["diagnostics"] = retained
         images = [path for path in files if path.is_file() and path.suffix.lower() == ".png"]
         require(images and len(images) <= 32, "attachment_image_count")
         output = self.parent / ("conductor-ui-images-" + os.environ["GITHUB_RUN_ID"])

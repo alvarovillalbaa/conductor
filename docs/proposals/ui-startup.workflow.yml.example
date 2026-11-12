@@ -1,0 +1,38 @@
+name: Temporary Conductor startup and UI check
+on:
+  create:
+permissions:
+  contents: read
+jobs:
+  ui-acceptance:
+    if: github.repository == 'alvarovillalbaa/conductor' && github.event.repository.private == false && github.event.ref_type == 'branch' && github.event.ref == 'qa/conductor-startup-20261113'
+    runs-on: xcode-27
+    timeout-minutes: 20
+    env:
+      SOURCE_COMMIT: APPROVED_SOURCE_COMMIT
+      DEVELOPER_DIR: /Applications/Xcode_27.2.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+          persist-credentials: false
+          fetch-depth: 1
+          clean: false
+      - name: Startup evidence then unchanged UI case and owned cleanup
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 script/run_ui_acceptance.py --source-commit "$SOURCE_COMMIT" | tee "$RUNNER_TEMP/conductor-startup.log"
+      - name: Retain bounded result, streams and images
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: conductor-startup-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/conductor-startup.log
+            ${{ runner.temp }}/conductor-ui-streams-${{ github.run_id }}
+            ${{ runner.temp }}/conductor-startup-${{ github.run_id }}
+            ${{ runner.temp }}/conductor-ui-images-${{ github.run_id }}
+            ${{ runner.temp }}/conductor-ui-diagnostics-${{ github.run_id }}
+          if-no-files-found: error
+          retention-days: 1
