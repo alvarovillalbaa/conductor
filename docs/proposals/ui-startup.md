@@ -58,3 +58,10 @@ The observer now validates labels, including ASCII uppercase, before spawning
 and records each completed command before attempting artifact writes. The second
 preparation changes this observer defect and its owned ref/seal only; there is
 no app, test, expectation, toolchain or timeout change.
+
+The second run completed the unsigned build and created/deleted its owned
+Shutdown device, but the probe read help on stdout only. Actual `simctl` help
+arrived on stderr and explicitly documented `-b`. Its [complete original packet](../results/2026/11-13/ui-startup-attempt-2.md)
+is retained. The third preparation reads both retained streams for this help
+probe. It keeps the startup operations and original UI assertions unchanged;
+neither earlier startup run reached a boot or app launch.

@@ -5,7 +5,7 @@ permissions:
   contents: read
 jobs:
   ui-acceptance:
-    if: github.repository == 'alvarovillalbaa/conductor' && github.event.repository.private == false && github.event.ref_type == 'branch' && github.event.ref == 'qa/conductor-startup-20261113-2'
+    if: github.repository == 'alvarovillalbaa/conductor' && github.event.repository.private == false && github.event.ref_type == 'branch' && github.event.ref == 'qa/conductor-startup-20261113-3'
     runs-on: xcode-27
     timeout-minutes: 20
     env:

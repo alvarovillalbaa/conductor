@@ -17,7 +17,7 @@ import tempfile
 import time
 import uuid
 
-SEAL = "docs/results/2026/11-13/ui-acceptance-source-startup-2.json"
+SEAL = "docs/results/2026/11-13/ui-acceptance-source-startup-3.json"
 WORKFLOW = ".github/workflows/ui-acceptance-startup.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
@@ -51,7 +51,7 @@ class Acceptance:
     def __init__(self, commit):
         require(os.environ.get("GITHUB_ACTIONS") == "true" and os.environ.get("CI") == "true"
                 and os.environ.get("GITHUB_REPOSITORY") == "alvarovillalbaa/conductor"
-                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-startup-20261113-2",
+                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-startup-20261113-3",
                 "public_ci_scope_required")
         self.repo = Path.cwd().resolve()
         runner_tmpdir = os.environ["TMPDIR"]
@@ -425,7 +425,8 @@ class Acceptance:
                         and json.loads(p.read_text()) == value, "device_ledger_changed")
 
     def startup(self):
-        boot_help, _ = self.run("bootstatus-help", ["xcrun", "simctl", "help", "bootstatus"])
+        boot_help, boot_help_row = self.run("bootstatus-help", ["xcrun", "simctl", "help", "bootstatus"])
+        boot_help += (self.parent / boot_help_row["stderr"]["file"]).read_bytes()
         require(b"-b" in boot_help, "bootstatus_flag_unavailable")
         self.run("boot-readiness", ["xcrun", "simctl", "bootstatus", self.simulator, "-b"], seconds=120)
         device = self.owned_device()
