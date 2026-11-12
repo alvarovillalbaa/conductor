@@ -17,7 +17,7 @@ import tempfile
 import time
 import uuid
 
-SEAL = "docs/results/2026/11-13/ui-acceptance-source-startup.json"
+SEAL = "docs/results/2026/11-13/ui-acceptance-source-startup-2.json"
 WORKFLOW = ".github/workflows/ui-acceptance-startup.yml"
 CASE = "ConductorUITests/ConductorUITests/testPlanAndRunSurviveRelaunchWithExplicitCompletion"
 SCOPE = {"scheme": "ConductorUIAcceptance", "testIdentifier": CASE, "expectedCases": 1,
@@ -51,7 +51,7 @@ class Acceptance:
     def __init__(self, commit):
         require(os.environ.get("GITHUB_ACTIONS") == "true" and os.environ.get("CI") == "true"
                 and os.environ.get("GITHUB_REPOSITORY") == "alvarovillalbaa/conductor"
-                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-startup-20261113",
+                and os.environ.get("GITHUB_REF") == "refs/heads/qa/conductor-startup-20261113-2",
                 "public_ci_scope_required")
         self.repo = Path.cwd().resolve()
         runner_tmpdir = os.environ["TMPDIR"]
@@ -95,6 +95,7 @@ class Acceptance:
 
     def run(self, label, args, seconds=30, cap=262144, cleanup=False, accept_failure=False):
         self.owner()
+        require(re.fullmatch(r"[A-Za-z0-9-]{1,80}", label) is not None, "command_label_invalid")
         require(cleanup or not self.interrupted, "interrupted_before_command")
         deadline = min(time.monotonic() + seconds, self.cleanup_deadline if cleanup else self.deadline)
         require(deadline > time.monotonic(), "command_deadline_exhausted")
@@ -189,15 +190,13 @@ class Acceptance:
                 except Exception:
                     row["stepperEvidence"] = {"diagnosticOnly": True, "status": "unavailable"}
         row["reaped"] = p.poll() is not None
+        self.commands.append(row)
         for name, data in (("stdout", out), ("stderr", err)):
-            filename = str(len(self.commands) + 1).zfill(2) + "-" + label + "." + name + ".txt"
-            require(re.fullmatch(r"[0-9]+-[a-z0-9-]+\.(stdout|stderr)\.txt", filename) is not None,
-                    "stream_filename_invalid")
+            filename = str(len(self.commands)).zfill(2) + "-" + label + "." + name + ".txt"
             with (self.streams_path / filename).open("xb") as handle:
                 handle.write(data)
             row[name]["file"] = self.streams_path.name + "/" + filename
             row[name]["complete"] = counts[0 if name == "stdout" else 1] == len(data)
-        self.commands.append(row)
         require(accept_failure or (code == 0 and reason is None), label + "_failed")
         return out, row
 

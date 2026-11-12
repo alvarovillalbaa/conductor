@@ -50,3 +50,11 @@ and delete only its owned QA ref. Keep every failed source seal and result.
 
 The [inactive workflow template](ui-startup.workflow.yml.example) is reviewable
 before dispatch. This document is preparation, not an execution result.
+
+The first startup run stopped before Xcode: the new stream filename check
+incorrectly rejected the existing `beforeSourceGuard-head` label. Its terminal
+report and original job log are retained in [attempt 1](../results/2026/11-13/ui-startup-attempt-1.md).
+The observer now validates labels, including ASCII uppercase, before spawning
+and records each completed command before attempting artifact writes. The second
+preparation changes this observer defect and its owned ref/seal only; there is
+no app, test, expectation, toolchain or timeout change.
