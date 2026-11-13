@@ -65,3 +65,13 @@ arrived on stderr and explicitly documented `-b`. Its [complete original packet]
 is retained. The third preparation reads both retained streams for this help
 probe. It keeps the startup operations and original UI assertions unchanged;
 neither earlier startup run reached a boot or app launch.
+
+## Terminal result
+
+The [third run and both earlier observer failures](../results/2026/11-13/ui-startup.md)
+are retained. Native builds passed in attempts 2 and 3, but attempt 3 timed out
+on post-boot inventory, after-source and cleanup queries before app installation.
+It supplies no successful readiness, first-screen or UI acceptance evidence.
+Its explicit Simulator deletion is unverified. The temporary workflow is now
+disabled and all three owned QA refs are deleted. No unchanged retry is planned;
+new startup evidence or an applicable environment repair is required.

@@ -21,6 +21,12 @@ iOS case failed during Xcode app launch before reaching the repaired screen;
 the full UI journey remains unverified. Earlier failures and their source seals
 are preserved in the [current-toolchain evidence](docs/proposals/ui-current-toolchain.md).
 
+The later [startup investigation](docs/results/2026/11-13/ui-startup.md) retained
+two observer repairs and two successful unsigned builds. Post-boot inventory,
+source and cleanup queries then timed out before app installation; there is no
+new first-screen or UI acceptance. That run's explicit Simulator deletion remains
+unverified. Its temporary workflow is disabled and all three task refs are gone.
+
 ## Intended workflow
 
 - Save reusable plans with up to 20 tasks, each lasting 1 second to 24 hours.
@@ -78,10 +84,11 @@ and App Store publication remain open.
 The current repair was checked at
 `cb542661210e28d6b2396cec9f7aa06845c2483a` with Xcode 27.2, iOS Simulator 27.2
 and iPhone 17 on arm64. Storage checks use the same Foundation file-store source
-in a separate SwiftPM test target. This publication updates documentation and
-retains results; application, package, tests and controller bytes match that
-checked source. Reproduce its exact source seal rather than applying it to this
-later documentation edition.
+in a separate SwiftPM test target. Publication `01acb656` retained that result
+without changing its application, package, tests or controller. The later
+startup observer has its own exact seals and failures; application/project,
+package, resources and test bytes remain unchanged. Reproduce each receipt at
+its checked source rather than applying an older seal to this documentation edition.
 
 ## Scope and evidence
 

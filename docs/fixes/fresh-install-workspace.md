@@ -33,5 +33,13 @@ notification and distribution checks also remain open.
 The [preparation history](../proposals/ui-current-toolchain.md) retains all earlier
 failures, including the initial directory-regression failure and one unverified
 simulator deletion. Original reports and source seals are immutable. This final
-documentation edition preserves all application, package, test and controller
-bytes from the checked source; its temporary active workflow is omitted.
+documentation edition at `01acb656` preserved all application, package, test and
+controller bytes from the checked source; its temporary active workflow was omitted.
+
+The later [startup investigation](../results/2026/11-13/ui-startup.md) changes only
+the observer and documentation, preserving the product and original UI case.
+Two unsigned builds passed, but post-boot inventory/source/cleanup queries timed
+out before app installation. No repaired iOS screen or journey is accepted;
+that run's explicit Simulator deletion remains unverified. The temporary workflow
+is disabled and all three new owned QA refs are deleted. Its original packets
+retain both observer defects and the actual startup failure.

@@ -1,0 +1,170 @@
+{
+  "schemaVersion": "conductor.ui-startup-investigation.v1",
+  "recordedAt": "2026-11-13T00:05:46Z",
+  "status": "failed",
+  "disposition": "diagnostic-closed-ios-acceptance-pending",
+  "preparation": "docs/proposals/ui-startup.md",
+  "checkedSource": "d6da982745c738aeb0e08ccc73b3acf2c3f6d0eb",
+  "attempts": [
+    {
+      "runId": 43332030657,
+      "jobId": 131578820471,
+      "sourceCommit": "0b9e4055bf3cff679bac438e05e8c7f1c7e009b9",
+      "qaCommit": "be05bc49282ba254cea373f620b47e7ee50c204c",
+      "status": "failed",
+      "failure": "stream_filename_invalid",
+      "appLaunched": false,
+      "uiCaseExecuted": false,
+      "sourceGuardsCompleted": 0,
+      "rawReceipt": {
+        "file": "ui-startup-attempt-1.json",
+        "bytes": 877,
+        "sha256": "718d4ffcf08d496fc84f5504648950cfde49d205a66cbddc4bf6118b9ade31bb",
+        "provenance": "terminal JSON extracted from original decoded job log"
+      },
+      "jobLog": {
+        "file": "ui-startup-attempt-1.log",
+        "bytes": 19864,
+        "sha256": "ffa04130bae9812cc9684313f9651a414c0916b19d50808a945cbd5ae1c19ab9"
+      },
+      "commandRowsMissing": true
+    },
+    {
+      "runId": 43332324653,
+      "jobId": 131579807621,
+      "sourceCommit": "8f649d8ecdebe5674224105e582bfccc09a3563a",
+      "qaCommit": "25217838dad846616d9d63d46740b0bf7360f457",
+      "status": "failed",
+      "failure": "bootstatus_flag_unavailable-observer-read-wrong-stream",
+      "unsignedBuildForTesting": "passed",
+      "sourceGuardsCompleted": 2,
+      "appLaunched": false,
+      "uiCaseExecuted": false,
+      "commandLeadersReaped": 21,
+      "completeStreams": 42,
+      "rawReceipt": {
+        "file": "ui-startup-attempt-2.json",
+        "bytes": 12305,
+        "sha256": "db64c051b13afb64168a9848e1c4bafb001f7b91f05ee45de54f6186c59d3fa4"
+      },
+      "artifact": {
+        "id": 13994414963,
+        "file": "ui-startup-attempt-2.zip",
+        "bytes": 69733,
+        "sha256": "8cae4386ddd4829720c6df970d781e028e7f165e51d79e7deac1ee6c2e8768a2",
+        "entries": 43,
+        "allStreamLengthsAndHashesVerified": true
+      },
+      "simulatorDeletion": "passed",
+      "scratchCleanup": "passed"
+    },
+    {
+      "runId": 43332815708,
+      "jobId": 131581436361,
+      "sourceCommit": "d6da982745c738aeb0e08ccc73b3acf2c3f6d0eb",
+      "qaCommit": "4b1d2a077eaffd9499b28cb68c0a49b46bd77169",
+      "status": "failed",
+      "failure": "post-boot-devices-source-and-cleanup-query-timeouts",
+      "unsignedBuildForTesting": "passed",
+      "sourceGuardsCompleted": 1,
+      "postSourceGuard": "failed-first-command-timeout",
+      "appInstallAttempted": false,
+      "appLaunched": false,
+      "uiCaseExecuted": false,
+      "commandLeadersReaped": 17,
+      "completeStreams": 34,
+      "rawReceipt": {
+        "file": "ui-startup-attempt-3.json",
+        "bytes": 10094,
+        "sha256": "6aad31eb1b57c9460e259bd1f92032796db950b8a908efaccda9dfcdf827c1f7"
+      },
+      "artifact": {
+        "id": 13995284362,
+        "file": "ui-startup-attempt-3.zip",
+        "bytes": 48343,
+        "sha256": "1ab5f057a2ee43e3b661f1263d839eeae87fe7b0b7c1bc1d3ebe8b1d88ae3296",
+        "entries": 35,
+        "allStreamLengthsAndHashesVerified": true
+      },
+      "bootCommand": {
+        "exitCode": 0,
+        "observedStdoutBytes": 15205,
+        "reportedTerminalStatus": 4294967295,
+        "reportedElapsed": "01:29",
+        "readiness": "unverified",
+        "cause": "unestablished"
+      },
+      "ownedDevice": {
+        "name": "conductor-ui-8960a725a10d412cbb3e761f6d521621",
+        "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-2",
+        "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-17",
+        "uuid": "32FDFD70-8134-4EEF-8C3C-03C2E1F3E3E7"
+      },
+      "simulatorDeletion": "unverified-cleanup-query-timeout",
+      "scratchCleanup": "passed"
+    }
+  ],
+  "publicationSourceEquivalence": {
+    "sealedFiles": 57,
+    "unchangedFiles": 54,
+    "changedDocumentation": [
+      "README.md",
+      "docs/fixes/fresh-install-workspace.md",
+      "docs/proposals/ui-startup.md"
+    ],
+    "productFilesUnchanged": 35,
+    "uiTestSha256": "81e7e74ffd3e3f6cd25e43691f011cbe71ed88c0ff2f766308c628a8fca79e00",
+    "postRunIntegrityNotProved": true
+  },
+  "carriedStorage": {
+    "sourceCommit": "cb542661210e28d6b2396cec9f7aa06845c2483a",
+    "runId": 43000742926,
+    "cases": 7,
+    "replayed": false,
+    "xunitFile": "../11-11/workspace-file-store-tests.xml",
+    "sha256": "187745f14e5a7c5d8e788813f7b77786fca768bc75670326dcce4b5a5faf8263"
+  },
+  "temporaryCI": {
+    "workflowId": 416703065,
+    "state": "disabled_manually",
+    "stateReadback": true,
+    "ownedRefsDeleted": [
+      "qa/conductor-startup-20261113",
+      "qa/conductor-startup-20261113-2",
+      "qa/conductor-startup-20261113-3"
+    ],
+    "matchingRefsReadback": [],
+    "activeWorkflowOnMain": false
+  },
+  "localDownloads": [
+    {
+      "file": "conductor-startup-attempt-2-20261113.zip",
+      "bytes": 69733,
+      "sha256": "8cae4386ddd4829720c6df970d781e028e7f165e51d79e7deac1ee6c2e8768a2",
+      "removed": true,
+      "absenceReadback": true
+    },
+    {
+      "file": "conductor-startup-attempt-3-20261113.zip",
+      "bytes": 48343,
+      "sha256": "1ab5f057a2ee43e3b661f1263d839eeae87fe7b0b7c1bc1d3ebe8b1d88ae3296",
+      "removed": true,
+      "absenceReadback": true
+    }
+  ],
+  "artifactTransfer": {
+    "nodeFetch": "failed before writing artifact bytes",
+    "error": "fetch failed",
+    "curlFallback": "passed with exact byte and digest verification"
+  },
+  "limits": [
+    "No successful Simulator readiness or app launch",
+    "No new screenshots or UI acceptance",
+    "Third run explicit Simulator deletion and post-source guard unverified",
+    "Historical current-toolchain second-profile deletion gap retained",
+    "No core or storage replay",
+    "No physical device, notifications, signing or distribution proof",
+    "No unchanged retry; startup evidence or applicable environment repair required"
+  ],
+  "portfolioGoal": "active-unfinished"
+}
