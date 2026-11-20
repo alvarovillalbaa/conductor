@@ -1,5 +1,9 @@
 # Conductor
 
+<!-- project-family:start -->
+> **Project family:** [OS Apps](https://github.com/alvarovillalbaa#os-apps) · **Area:** iOS
+<!-- project-family:end -->
+
 A native iOS coordinator for tasks that need to finish together. Define the
 tasks and their durations, choose a shared finish time, and Conductor works
 backward to show when each task should start.
